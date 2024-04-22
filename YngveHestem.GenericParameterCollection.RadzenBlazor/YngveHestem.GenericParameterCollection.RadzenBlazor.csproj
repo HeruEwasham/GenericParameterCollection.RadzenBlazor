@@ -5,10 +5,12 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 
-    <Version>1.0.0-beta01</Version>
+    <Version>1.0.0-beta02</Version>
     <Description>This provides controls for using GenericParameterCollection in a Blazor-application by using Radzen.Blazor-components.</Description>
     <PackageReleaseNotes>
-        - Initial release.
+        - Changed so the OnChange-event is not triggered if it has no handler. This means Blazor will not unneccessarry reload the page.
+        - Changed the default MinDate to be 01.01.1950, and MaxDate to DateTime.Now.AddYears(30), which is the default in Radzen. This means that using DatePicker are much more responsive.
+        - Added functionality to add and delete entries from lists.
     </PackageReleaseNotes>
     <Authors>Yngve J. K. Hestem</Authors>
     <Copyright>Copyright (c) Yngve J. K. Hestem 2024</Copyright>
@@ -26,7 +28,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.18" />
-    <PackageReference Include="Radzen.Blazor" Version="4.29.8" />
+    <PackageReference Include="Radzen.Blazor" Version="4.29.9" />
     <PackageReference Include="YngveHestem.GenericParameterCollection" Version="1.1.0" />
   </ItemGroup>
 

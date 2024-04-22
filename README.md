@@ -36,7 +36,7 @@ This event is triggered each time the user do a change in the component.
 
 When the event is triggered you will get an object that will contain both the new ParameterCollection, and the key to the parameter that was changed.
 
-Mark: Currently you have to set the new ParameterCollection to the ParameterCollection that is referenced in the component before the OnChange-event has exited. If not you may see that blazor reloads the last version of the ParameterCollection.
+Mark: If you use this OnChange-event, you must currently manually set the new ParameterCollection to the ParameterCollection that is referenced in the component before the OnChange-event has exited. If not you may see that Blazor reloads the last version of the ParameterCollection.
 
 #### Example code
 
@@ -83,7 +83,7 @@ If you define this in a ParameterCollection-ParameterType, the changes will affe
 | MaxNumberOfCharacters | maxChars | long? | Specifies max number of characters that can be given in a text. | null |
 | NumberOfRowsInTextArea | textareaRows | int | Specifies the number of rows a textarea will show. | 5 |
 | NumberOfColumnsInTextArea | textareaColumns | int | Specifies the number of columns (characters) a textarea will show horizontally. | 100 |
-| AcceptedMimeTypes | mimeType | string[] | Specifies what mime types are accepted when selecting file. | null |
+| AcceptedMimeTypes | acceptedMimeTypes | string[] | Specifies what mime types are accepted when selecting file. | null |
 | ChooseFileText | chooseFileText | string | Specifies the text to show on the Choose file button. | Choose file |
 | DeleteFileText | deleteFileText | string | Specifies the text to show on the Delete file button. | Delete |
 | MaxFileSize | maxFileSize | int | Specifies the max file size allowed. | 5 * 1024 * 1024 |
@@ -105,3 +105,8 @@ If you define this in a ParameterCollection-ParameterType, the changes will affe
 | BoolControlToUse | boolControl | BoolControl | Specifies what type of bool control to use. | Switch |
 | UseVirtualizationOnList | useVirtualizationOnList | bool | Specifies if lists should be virtualized. If not, the list will be paged. | true |
 | ListPageSize | listPageSize | int | Specifies the size of each page if the list is paged. | 5 |
+| AddEntryToListText | addEntryToListText | string | Specifies the text on the button to add a new object to the list. | Add |
+| DeleteEntryFromListText | deleteEntryFromListText | string | Specifies the text on the button to delete the given object from the list. | Delete |
+| DeleteEntryFromListAriaDescription | deleteEntryFromListAriaDescription | string | Specifies the text used to describe the delete button on the given entry in a list for screen readers. You can use {0} to get the current number the entry are in the list, use {1} to get the parameters viewable name and {2} to get the current value. | Delete entry number {0} from the list in parameter "{1}". The entry has the value "{2}". |
+| AddEntryToListAriaDescription | addEntryToListAriaDescription | string | Specifies the text used to describe the add button to add a new entry in a list for screen readers. You can use {0} to get the parameters viewable name. | Add a new entry to the list in parameter "{0}". |
+| | defaultValue | TValue (Generic baseed on value (IEnumerable)) | This is used on IEnumerable-types to define their Default-value (which is their initial state when adding new value). | If not defined, this will either be default(TValue) or String.Empty if TValue is string or DateTime.Now if TValue is DateTime. |

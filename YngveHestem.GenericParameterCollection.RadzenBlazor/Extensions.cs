@@ -94,6 +94,28 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
             }
             return result;
         }
+
+        internal static TValue GetDefaultValue<TValue>(ParameterCollection additionalInfo)
+        {
+            if (additionalInfo != null && additionalInfo.HasKeyAndCanConvertTo("defaultValue", typeof(TValue)))
+            {
+                return additionalInfo.GetByKey<TValue>("defaultValue");
+            }
+
+            var type = typeof(TValue);
+            if (type == typeof(string))
+            {
+                return (TValue)(object)string.Empty;
+            }
+            else if (type == typeof(DateTime))
+            {
+                return (TValue)(object)DateTime.Now;
+            }
+            else
+            {
+                return default(TValue);
+            }
+        }
     }
 }
 

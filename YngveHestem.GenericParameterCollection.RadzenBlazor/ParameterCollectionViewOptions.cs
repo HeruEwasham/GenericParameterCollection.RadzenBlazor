@@ -117,7 +117,7 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
         /// <summary>
         /// Specifies what mime types are accepted when selecting file.
         /// </summary>
-        [ParameterProperty("mimeType")]
+        [ParameterProperty("acceptedMimeTypes")]
         public string[]? AcceptedMimeTypes = null;
 
         /// <summary>
@@ -196,13 +196,13 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
         /// The earliest date that is possible to pick.
         /// </summary>
         [ParameterProperty("minDate")]
-        public DateTime MinDate = DateTime.Today.AddYears(-1000);
+        public DateTime MinDate = new DateTime(1950, 1, 1);
 
         /// <summary>
         /// The latest date that is possible to pick.
         /// </summary>
         [ParameterProperty("maxDate")]
-        public DateTime MaxDate = DateTime.Today.AddYears(1000);
+        public DateTime MaxDate = DateTime.Now.AddYears(30);
 
         /// <summary>
         /// Specifies the maximum number of selected labels to show in the DropDownList.
@@ -245,6 +245,30 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
         /// </summary>
         [ParameterProperty("listPageSize")]
         public int ListPageSize = 5;
+
+        /// <summary>
+        /// Specifies the text on the button to add a new object to the list.
+        /// </summary>
+        [ParameterProperty("addEntryToListText")]
+        public string AddEntryToListText = "Add";
+
+        /// <summary>
+        /// Specifies the text on the button to delete the given object from the list.
+        /// </summary>
+        [ParameterProperty("deleteEntryFromListText")]
+        public string DeleteEntryFromListText = "Delete";
+
+        /// <summary>
+        /// Specifies the text used to describe the delete button on the given entry in a list for screen readers. You can use {0} to get the current number the entry are in the list, use {1} to get the parameters viewable name and {2} to get the current value.
+        /// </summary>
+        [ParameterProperty("deleteEntryFromListAriaDescription")]
+        public string DeleteEntryFromListAriaDescription = "Delete entry number {0} from the list in parameter \"{1}\". The entry has the value \"{2}\".";
+
+        /// <summary>
+        /// Specifies the text used to describe the add button to add a new entry in a list for screen readers. You can use {0} to get the parameters viewable name.
+        /// </summary>
+        [ParameterProperty("addEntryToListAriaDescription")]
+        public string AddEntryToListAriaDescription = "Add a new entry to the list in parameter \"{0}\".";
 
         public ParameterCollectionViewOptions CreateCopy()
         {
@@ -289,7 +313,11 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
                 SelectAllItemsText = SelectAllItemsText,
                 BoolControlToUse = BoolControlToUse,
                 UseVirtualizationOnList = UseVirtualizationOnList,
-                ListPageSize = ListPageSize
+                ListPageSize = ListPageSize,
+                AddEntryToListText = AddEntryToListText,
+                DeleteEntryFromListText = DeleteEntryFromListText,
+                DeleteEntryFromListAriaDescription = DeleteEntryFromListAriaDescription,
+                AddEntryToListAriaDescription = AddEntryToListAriaDescription
             };
         }
         /// <summary>
@@ -424,9 +452,9 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
                 options.NumberOfColumnsInTextArea = parameters.GetByKey<int>("textareaColumns");
             }
 
-            if (parameters.HasKeyAndCanConvertTo("mimeType", typeof(string[])))
+            if (parameters.HasKeyAndCanConvertTo("acceptedMimeTypes", typeof(string[])))
             {
-                options.AcceptedMimeTypes = parameters.GetByKey<string[]>("mimeType");
+                options.AcceptedMimeTypes = parameters.GetByKey<string[]>("acceptedMimeTypes");
             }
 
             if (parameters.HasKeyAndCanConvertTo("chooseFileText", typeof(string)))
@@ -532,6 +560,26 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
             if (parameters.HasKeyAndCanConvertTo("listPageSize", typeof(int)))
             {
                 options.ListPageSize = parameters.GetByKey<int>("listPageSize");
+            }
+
+            if (parameters.HasKeyAndCanConvertTo("addEntryToListText", typeof(string)))
+            {
+                options.AddEntryToListText = parameters.GetByKey<string>("addEntryToListText");
+            }
+
+            if (parameters.HasKeyAndCanConvertTo("deleteEntryFromListText", typeof(string)))
+            {
+                options.DeleteEntryFromListText = parameters.GetByKey<string>("deleteEntryFromListText");
+            }
+
+            if (parameters.HasKeyAndCanConvertTo("deleteEntryFromListAriaDescription", typeof(string)))
+            {
+                options.DeleteEntryFromListAriaDescription = parameters.GetByKey<string>("deleteEntryFromListAriaDescription");
+            }
+
+            if (parameters.HasKeyAndCanConvertTo("addEntryToListAriaDescription", typeof(string)))
+            {
+                options.AddEntryToListAriaDescription = parameters.GetByKey<string>("addEntryToListAriaDescription");
             }
 
             return options;

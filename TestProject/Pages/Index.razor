@@ -19,6 +19,8 @@ Welcome to your new app.
                                                                                                                                     })"></ParameterCollectionView>
 </Radzen.Blazor.RadzenCard>
 
+<Radzen.Blazor.RadzenButton Text="Update ParameterCollection manually" Click="@((args) => _parameters = _parameterCollectionView!.ParameterCollection!)"></Radzen.Blazor.RadzenButton>
+
 <Radzen.Blazor.RadzenTextArea Cols="150" Rows="20" ReadOnly="true" Value="@_parameters.ToString()"></Radzen.Blazor.RadzenTextArea>
 
 @code {

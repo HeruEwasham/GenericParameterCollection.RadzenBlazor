@@ -114,58 +114,95 @@
                                     || parameter.Type == ParameterType.Date_IEnumerable
                                     || parameter.Type == ParameterType.ParameterCollection_IEnumerable)
                         {
-                            <RadzenDataList AllowVirtualization=@localOptions.UseVirtualizationOnList Style="@(localOptions.UseVirtualizationOnList ? "height:400px;overflow:auto;" : "")"
-                                            WrapItems="@(!localOptions.UseVirtualizationOnList)" AllowPaging="@(!localOptions.UseVirtualizationOnList)"
-                                            Data="@(((IEnumerable<object>)parameter.GetValue(parameter.Type.GetDefaultValueType())).GetNumberedlist())" TItem="Tuple<int, object>" PageSize="@localOptions.ListPageSize" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
-                                <Template Context="itemValue">
-                                    @if (parameter.Type == ParameterType.String_IEnumerable)
+                    <RadzenStack>
+                        <RadzenDataList AllowVirtualization=@localOptions.UseVirtualizationOnList Style="@(localOptions.UseVirtualizationOnList ? "height:400px;overflow:auto;" : "")"
+                                        WrapItems="@(!localOptions.UseVirtualizationOnList)" AllowPaging="@(!localOptions.UseVirtualizationOnList)"
+                                        Data="@(((IEnumerable<object>)parameter.GetValue(parameter.Type.GetDefaultValueType())).GetNumberedlist())" TItem="Tuple<int, object>" PageSize="@localOptions.ListPageSize" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
+                            <Template Context="itemValue">
+                                @if (parameter.Type == ParameterType.String_IEnumerable)
+                                {
+                                    if (localOptions.IsPassword)
                                     {
-                                        if (localOptions.IsPassword)
-                                        {
-                                            <RadzenPassword ReadOnly="@localOptions.ReadOnly" Value="@((string)itemValue.Item2)" Placeholder="@localOptions.PlaceholderText" Change="(value) => UpdateListParameter<string>(parameter.Key, itemValue.Item1, value)"></RadzenPassword>
-                                        }
-                                        else
-                                        {
-                                            <RadzenTextBox ReadOnly="@localOptions.ReadOnly" Value="@((string)itemValue.Item2)" Placeholder="@localOptions.PlaceholderText" MaxLength="@localOptions.MaxNumberOfCharacters" Change="(value) => UpdateListParameter<string>(parameter.Key, itemValue.Item1, value)"></RadzenTextBox>
-                                        }
+                                        <RadzenPassword ReadOnly="@localOptions.ReadOnly" Value="@((string)itemValue.Item2)" Placeholder="@localOptions.PlaceholderText" Change="(value) => UpdateListParameter<string>(parameter.Key, itemValue.Item1, value)"></RadzenPassword>
                                     }
-                                    else if (parameter.Type == ParameterType.String_Multiline_IEnumerable)
+                                    else
                                     {
-                                        <RadzenTextArea ReadOnly="@localOptions.ReadOnly" Value="@((string)itemValue.Item2)" Placeholder="@localOptions.PlaceholderText" MaxLength="@localOptions.MaxNumberOfCharacters" Rows="@localOptions.NumberOfRowsInTextArea" Cols="@localOptions.NumberOfColumnsInTextArea" Change="(value) => UpdateListParameter<string>(parameter.Key, itemValue.Item1, value)"></RadzenTextArea>
+                                        <RadzenTextBox ReadOnly="@localOptions.ReadOnly" Value="@((string)itemValue.Item2)" Placeholder="@localOptions.PlaceholderText" MaxLength="@localOptions.MaxNumberOfCharacters" Change="(value) => UpdateListParameter<string>(parameter.Key, itemValue.Item1, value)"></RadzenTextBox>
                                     }
-                                    else if (parameter.Type == ParameterType.Int_IEnumerable)
+                                    <RadzenButton Disabled="@localOptions.ReadOnly" aria-description="@(string.Format(localOptions.DeleteEntryFromListAriaDescription, itemValue.Item1 + 1, parameterText, itemValue.Item2.ToString()))" ButtonStyle="ButtonStyle.Danger" Variant="@localOptions.ElementsDesignVariant" Style="float: right" Text="@localOptions.DeleteEntryFromListText" Click="@((args) => DeleteListParameter<string>(parameter.Key, itemValue.Item1))"></RadzenButton>
+                                }
+                                else if (parameter.Type == ParameterType.String_Multiline_IEnumerable)
+                                {
+                                    <RadzenTextArea ReadOnly="@localOptions.ReadOnly" Value="@((string)itemValue.Item2)" Placeholder="@localOptions.PlaceholderText" MaxLength="@localOptions.MaxNumberOfCharacters" Rows="@localOptions.NumberOfRowsInTextArea" Cols="@localOptions.NumberOfColumnsInTextArea" Change="(value) => UpdateListParameter<string>(parameter.Key, itemValue.Item1, value)"></RadzenTextArea>
+                                    <RadzenButton Disabled="@localOptions.ReadOnly" aria-description="@(string.Format(localOptions.DeleteEntryFromListAriaDescription, itemValue.Item1 + 1, parameterText, itemValue.Item2.ToString()))" ButtonStyle="ButtonStyle.Danger" Variant="@localOptions.ElementsDesignVariant" Style="float: right" Text="@localOptions.DeleteEntryFromListText" Click="@((args) => DeleteListParameter<string>(parameter.Key, itemValue.Item1))"></RadzenButton>
+                                }
+                                else if (parameter.Type == ParameterType.Int_IEnumerable)
+                                {
+                                    <RadzenNumeric ReadOnly="@localOptions.ReadOnly" TValue="int" Value="@((int)itemValue.Item2)" Placeholder="@localOptions.PlaceholderText" Min="@localOptions.MinNumber" Max="@localOptions.MaxNumber" Step="@localOptions.StepInteger.ToString()" Change="(value) => UpdateListParameter<int>(parameter.Key, itemValue.Item1, value)"></RadzenNumeric>
+                                    <RadzenButton Disabled="@localOptions.ReadOnly" aria-description="@(string.Format(localOptions.DeleteEntryFromListAriaDescription, itemValue.Item1 + 1, parameterText, itemValue.Item2.ToString()))" ButtonStyle="ButtonStyle.Danger" Variant="@localOptions.ElementsDesignVariant" Style="float: right" Text="@localOptions.DeleteEntryFromListText" Click="@((args) => DeleteListParameter<int>(parameter.Key, itemValue.Item1))"></RadzenButton>
+                                }
+                                else if (parameter.Type == ParameterType.Decimal_IEnumerable)
+                                {
+                                    <RadzenNumeric ReadOnly="@localOptions.ReadOnly" TValue="decimal" Value="@((decimal)itemValue.Item2)" Placeholder="@localOptions.PlaceholderText" Min="@localOptions.MinNumber" Max="@localOptions.MaxNumber" Step="@localOptions.StepDecimal.ToString()" Change="(value) => UpdateListParameter<decimal>(parameter.Key, itemValue.Item1, value)"></RadzenNumeric>
+                                    <RadzenButton Disabled="@localOptions.ReadOnly" aria-description="@(string.Format(localOptions.DeleteEntryFromListAriaDescription, itemValue.Item1 + 1, parameterText, itemValue.Item2.ToString()))" ButtonStyle="ButtonStyle.Danger" Variant="@localOptions.ElementsDesignVariant" Style="float: right" Text="@localOptions.DeleteEntryFromListText" Click="@((args) => DeleteListParameter<decimal>(parameter.Key, itemValue.Item1))"></RadzenButton>
+                                }
+                                else if (parameter.Type == ParameterType.Bool_IEnumerable)
+                                {
+                                    if (localOptions.BoolControlToUse == BoolControl.Switch)
                                     {
-                                        <RadzenNumeric ReadOnly="@localOptions.ReadOnly" TValue="int" Value="@((int)itemValue.Item2)" Placeholder="@localOptions.PlaceholderText" Min="@localOptions.MinNumber" Max="@localOptions.MaxNumber" Step="@localOptions.StepInteger.ToString()" Change="(value) => UpdateListParameter<int>(parameter.Key, itemValue.Item1, value)"></RadzenNumeric>
+                                        <RadzenSwitch Disabled="@localOptions.ReadOnly" Value="@((bool)itemValue.Item2)" Change="(value) => UpdateListParameter<bool>(parameter.Key, itemValue.Item1, value)"></RadzenSwitch>
                                     }
-                                    else if (parameter.Type == ParameterType.Decimal_IEnumerable)
+                                    else
                                     {
-                                        <RadzenNumeric ReadOnly="@localOptions.ReadOnly" TValue="decimal" Value="@((decimal)itemValue.Item2)" Placeholder="@localOptions.PlaceholderText" Min="@localOptions.MinNumber" Max="@localOptions.MaxNumber" Step="@localOptions.StepDecimal.ToString()" Change="(value) => UpdateListParameter<decimal>(parameter.Key, itemValue.Item1, value)"></RadzenNumeric>
+                                        <RadzenCheckBox Disabled="@localOptions.ReadOnly" TValue="bool" Value="@((bool)itemValue.Item2)" Change="(value) => UpdateListParameter<bool>(parameter.Key, itemValue.Item1, value)"></RadzenCheckBox>
                                     }
-                                    else if (parameter.Type == ParameterType.Bool_IEnumerable)
-                                    {
-                                        if (localOptions.BoolControlToUse == BoolControl.Switch)
-                                        {
-                                            <RadzenSwitch Disabled="@localOptions.ReadOnly" Value="@((bool)itemValue.Item2)" Change="(value) => UpdateListParameter<bool>(parameter.Key, itemValue.Item1, value)"></RadzenSwitch>
-                                        }
-                                        else
-                                        {
-                                            <RadzenCheckBox Disabled="@localOptions.ReadOnly" TValue="bool" Value="@((bool)itemValue.Item2)" Change="(value) => UpdateListParameter<bool>(parameter.Key, itemValue.Item1, value)"></RadzenCheckBox>
-                                        }
-                                    }
-                                    else if (parameter.Type == ParameterType.DateTime_IEnumerable)
-                                    {
-                                        <RadzenDatePicker ReadOnly="@localOptions.ReadOnly" DateFormat="@localOptions.DateTimeFormat" Placeholder="@localOptions.PlaceholderText" AllowClear="false" TValue="DateTime" ShowDays="true" ShowTime="true" ShowSeconds="true" HoursStep="@localOptions.HoursStep.ToString()" MinutesStep="@localOptions.MinutesStep.ToString()" SecondsStep="@localOptions.SecondsStep.ToString()" ShowCalendarWeek="@localOptions.ShowCalenderWeek" Min="@localOptions.MinDate" Max="@localOptions.MaxDate" CalendarWeekTitle="@localOptions.CalendarWeekTitle" Value="@((DateTime)itemValue.Item2)" Change="(value) => UpdateListParameter<DateTime?>(parameter.Key, itemValue.Item1, value)"></RadzenDatePicker>
-                                    }
-                                    else if (parameter.Type == ParameterType.Date_IEnumerable)
-                                    {
-                                        <RadzenDatePicker ReadOnly="@localOptions.ReadOnly" DateFormat="@localOptions.DateFormat" Placeholder="@localOptions.PlaceholderText" AllowClear="false" TValue="DateTime" ShowDays="true" ShowCalendarWeek="@localOptions.ShowCalenderWeek" Min="@localOptions.MinDate" Max="@localOptions.MaxDate" CalendarWeekTitle="@localOptions.CalendarWeekTitle" Value="@((DateTime)itemValue.Item2)" Change="(value) => UpdateListParameter<DateTime?>(parameter.Key, itemValue.Item1, value)"></RadzenDatePicker>
-                                    }
-                                    else if (parameter.Type == ParameterType.ParameterCollection_IEnumerable)
-                                    {
-                                        <ParameterCollectionView ParameterCollection="@((ParameterCollection)itemValue.Item2)" Options="@localOptions" OnChange="@((args) => UpdateListParameter<ParameterCollection>(parameter.Key, itemValue.Item1, args.NewParameterCollection))"></ParameterCollectionView>
-                                    }
-                                </Template>
-                            </RadzenDataList>
+                                    <RadzenButton Disabled="@localOptions.ReadOnly" aria-description="@(string.Format(localOptions.DeleteEntryFromListAriaDescription, itemValue.Item1 + 1, parameterText, itemValue.Item2.ToString()))" ButtonStyle="ButtonStyle.Danger" Variant="@localOptions.ElementsDesignVariant" Style="float: right" Text="@localOptions.DeleteEntryFromListText" Click="@((args) => DeleteListParameter<bool>(parameter.Key, itemValue.Item1))"></RadzenButton>
+                                }
+                                else if (parameter.Type == ParameterType.DateTime_IEnumerable)
+                                {
+                                    <RadzenDatePicker ReadOnly="@localOptions.ReadOnly" DateFormat="@localOptions.DateTimeFormat" Placeholder="@localOptions.PlaceholderText" AllowClear="false" TValue="DateTime" ShowDays="true" ShowTime="true" ShowSeconds="true" HoursStep="@localOptions.HoursStep.ToString()" MinutesStep="@localOptions.MinutesStep.ToString()" SecondsStep="@localOptions.SecondsStep.ToString()" ShowCalendarWeek="@localOptions.ShowCalenderWeek" Min="@localOptions.MinDate" Max="@localOptions.MaxDate" CalendarWeekTitle="@localOptions.CalendarWeekTitle" Value="@((DateTime)itemValue.Item2)" Change="(value) => UpdateListParameter<DateTime?>(parameter.Key, itemValue.Item1, value)"></RadzenDatePicker>
+                                    <RadzenButton Disabled="@localOptions.ReadOnly" aria-description="@(string.Format(localOptions.DeleteEntryFromListAriaDescription, itemValue.Item1 + 1, parameterText, itemValue.Item2.ToString()))" ButtonStyle="ButtonStyle.Danger" Variant="@localOptions.ElementsDesignVariant" Style="float: right" Text="@localOptions.DeleteEntryFromListText" Click="@((args) => DeleteListParameter<DateTime>(parameter.Key, itemValue.Item1))"></RadzenButton>
+                                }
+                                else if (parameter.Type == ParameterType.Date_IEnumerable)
+                                {
+                                    <RadzenDatePicker ReadOnly="@localOptions.ReadOnly" DateFormat="@localOptions.DateFormat" Placeholder="@localOptions.PlaceholderText" AllowClear="false" TValue="DateTime" ShowDays="true" ShowCalendarWeek="@localOptions.ShowCalenderWeek" Min="@localOptions.MinDate" Max="@localOptions.MaxDate" CalendarWeekTitle="@localOptions.CalendarWeekTitle" Value="@((DateTime)itemValue.Item2)" Change="(value) => UpdateListParameter<DateTime?>(parameter.Key, itemValue.Item1, value)"></RadzenDatePicker>
+                                    <RadzenButton Disabled="@localOptions.ReadOnly" aria-description="@(string.Format(localOptions.DeleteEntryFromListAriaDescription, itemValue.Item1 + 1, parameterText, itemValue.Item2.ToString()))" ButtonStyle="ButtonStyle.Danger" Variant="@localOptions.ElementsDesignVariant" Style="float: right" Text="@localOptions.DeleteEntryFromListText" Click="@((args) => DeleteListParameter<DateTime>(parameter.Key, itemValue.Item1))"></RadzenButton>
+                                }
+                                else if (parameter.Type == ParameterType.ParameterCollection_IEnumerable)
+                                {
+                                    <ParameterCollectionView ParameterCollection="@((ParameterCollection)itemValue.Item2)" Options="@localOptions" OnChange="@((args) => UpdateListParameter<ParameterCollection>(parameter.Key, itemValue.Item1, args.NewParameterCollection))"></ParameterCollectionView>
+                                    <RadzenButton Disabled="@localOptions.ReadOnly" aria-description="@(string.Format(localOptions.DeleteEntryFromListAriaDescription, itemValue.Item1 + 1, parameterText, itemValue.Item2.ToString()))" ButtonStyle="ButtonStyle.Danger" Variant="@localOptions.ElementsDesignVariant" Style="float: right" Text="@localOptions.DeleteEntryFromListText" Click="@((args) => DeleteListParameter<ParameterCollection>(parameter.Key, itemValue.Item1))"></RadzenButton>
+                                }
+                            </Template>
+                        </RadzenDataList>
+                        @if (!localOptions.ReadOnly)
+                        {
+                            if (parameter.Type == ParameterType.String_IEnumerable || parameter.Type == ParameterType.String_Multiline_IEnumerable)
+                            {
+                                <RadzenButton Disabled="@localOptions.ReadOnly" aria-description="@(string.Format(localOptions.AddEntryToListAriaDescription, parameterText))" Text="@localOptions.AddEntryToListText" ButtonStyle="ButtonStyle.Success" Variant="@localOptions.ElementsDesignVariant" Click="@((args) => AddListParameter<string>(parameter.Key, additionalInfo))"></RadzenButton>
+                            }
+                            else if (parameter.Type == ParameterType.Int_IEnumerable)
+                            {
+                                <RadzenButton Disabled="@localOptions.ReadOnly" aria-description="@(string.Format(localOptions.AddEntryToListAriaDescription, parameterText))" Text="@localOptions.AddEntryToListText" ButtonStyle="ButtonStyle.Success" Variant="@localOptions.ElementsDesignVariant" Click="@((args) => AddListParameter<int>(parameter.Key, additionalInfo))"></RadzenButton>
+                            }
+                            else if (parameter.Type == ParameterType.Decimal_IEnumerable)
+                            {
+                                <RadzenButton Disabled="@localOptions.ReadOnly" aria-description="@(string.Format(localOptions.AddEntryToListAriaDescription, parameterText))" Text="@localOptions.AddEntryToListText" ButtonStyle="ButtonStyle.Success" Variant="@localOptions.ElementsDesignVariant" Click="@((args) => AddListParameter<decimal>(parameter.Key, additionalInfo))"></RadzenButton>
+                            }
+                            else if (parameter.Type == ParameterType.Bool_IEnumerable)
+                            {
+                                <RadzenButton Disabled="@localOptions.ReadOnly" aria-description="@(string.Format(localOptions.AddEntryToListAriaDescription, parameterText))" Text="@localOptions.AddEntryToListText" ButtonStyle="ButtonStyle.Success" Variant="@localOptions.ElementsDesignVariant" Click="@((args) => AddListParameter<bool>(parameter.Key, additionalInfo))"></RadzenButton>
+                            }
+                            else if (parameter.Type == ParameterType.DateTime_IEnumerable || parameter.Type == ParameterType.Date_IEnumerable)
+                            {
+                                <RadzenButton Disabled="@localOptions.ReadOnly" aria-description="@(string.Format(localOptions.AddEntryToListAriaDescription, parameterText))" Text="@localOptions.AddEntryToListText" ButtonStyle="ButtonStyle.Success" Variant="@localOptions.ElementsDesignVariant" Click="@((args) => AddListParameter<DateTime>(parameter.Key, additionalInfo))"></RadzenButton>
+                            }
+                            else if (parameter.Type == ParameterType.ParameterCollection_IEnumerable)
+                            {
+                                <RadzenButton Disabled="@localOptions.ReadOnly" aria-description="@(string.Format(localOptions.AddEntryToListAriaDescription, parameterText))" Text="@localOptions.AddEntryToListText" ButtonStyle="ButtonStyle.Success" Variant="@localOptions.ElementsDesignVariant" Click="@((args) => AddListParameter<ParameterCollection>(parameter.Key, additionalInfo))"></RadzenButton>
+                            }
+                        }
+                    </RadzenStack>
                         }
                     </RadzenFormField>
                 }
@@ -205,14 +242,14 @@
     {
         if (value != null)
         {
-            if (_currentParameterCollection!.GetParameterByKey(parameterKey).SetValue(value))
+            if (_currentParameterCollection!.GetParameterByKey(parameterKey).SetValue(value) && OnChange.HasDelegate)
             {
                 OnChange.InvokeAsync(new ParameterCollectionViewOnChangeEventArgs(_currentParameterCollection, parameterKey));
             }
         }
     }
 
-    private void UpdateListParameter<TValue>(string parameterKey, int placementInList, TValue? value)
+    private void UpdateListParameter<TValue>(string parameterKey, int index, TValue? value)
     {
         if (value == null)
         {
@@ -220,19 +257,43 @@
         }
 
         var list = _currentParameterCollection!.GetByKey<List<TValue>>(parameterKey);
-        if (placementInList < list.Count)
+        if (index < list.Count)
         {
-            list[placementInList] = value;
+            list[index] = value;
         }
-        else if (placementInList == list.Count)
+        else if (index == list.Count)
         {
             list.Add(value);
         }
         else
         {
-            throw new ArgumentOutOfRangeException(nameof(placementInList), "It should not be possible for placementInList to be bigger than max one entry extra.");
+            throw new ArgumentOutOfRangeException(nameof(index), "It should not be possible for the index to be bigger than max one entry extra.");
         }
 
+        ChangeParameter(parameterKey, list);
+    }
+
+    /// <summary>
+    /// Deletes an entry from the given list.
+    /// </summary>
+    /// <param name="parameterKey">The key to the list.</param>
+    /// <param name="index">The placement the item to be deleted has in the list.</param>
+    private void DeleteListParameter<TValue>(string parameterKey, int index)
+    {
+        var list = _currentParameterCollection!.GetByKey<List<TValue>>(parameterKey);
+        if (index < list.Count)
+        {
+            list.RemoveAt(index);
+        }
+
+        ChangeParameter(parameterKey, list);
+    }
+
+    private void AddListParameter<TValue>(string parameterKey, ParameterCollection additionalInfo)
+    {
+        var defaultValue = Extensions.GetDefaultValue<TValue>(additionalInfo);
+        var list = _currentParameterCollection!.GetByKey<List<TValue>>(parameterKey);
+        list.Add(defaultValue);
         ChangeParameter(parameterKey, list);
     }
 }
