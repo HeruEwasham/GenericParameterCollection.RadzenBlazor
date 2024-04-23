@@ -117,7 +117,7 @@
                     <RadzenStack>
                         <RadzenDataList AllowVirtualization=@localOptions.UseVirtualizationOnList Style="@(localOptions.UseVirtualizationOnList ? "height:400px;overflow:auto;" : "")"
                                         WrapItems="@(!localOptions.UseVirtualizationOnList)" AllowPaging="@(!localOptions.UseVirtualizationOnList)"
-                                        Data="@(((IEnumerable<object>)parameter.GetValue(parameter.Type.GetDefaultValueType())).GetNumberedlist())" TItem="Tuple<int, object>" PageSize="@localOptions.ListPageSize" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
+                                        Data="@(GetDataOfList(parameter))" TItem="Tuple<int, object>" PageSize="@localOptions.ListPageSize" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
                             <Template Context="itemValue">
                                 @if (parameter.Type == ParameterType.String_IEnumerable)
                                 {
@@ -296,5 +296,12 @@
         list.Add(defaultValue);
         ChangeParameter(parameterKey, list);
     }
+
+    private List<Tuple<int, object>> GetDataOfList(Parameter parameter)
+    {
+        var defaultValueType = parameter.Type.GetDefaultValueType();
+        var list = parameter.GetValue(defaultValueType);
+        return ((IEnumerable<object>)list).GetNumberedlist();
+}
 }
 
