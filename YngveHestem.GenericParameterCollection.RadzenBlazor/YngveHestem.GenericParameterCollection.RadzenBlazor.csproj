@@ -5,11 +5,13 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 
-    <Version>1.0.0-beta03</Version>
+    <Version>1.0.0-beta04</Version>
     <Description>This provides controls for using GenericParameterCollection in a Blazor-application by using Radzen.Blazor-components.</Description>
     <PackageReleaseNotes>
-        - Updated YngveHestem.GenericParameterCollection to version 1.1.1
-        - Updated Radzen.Blazor to version 4.30.0
+        - Updated Radzen.Blazor to version 4.30.1.
+        - Fixed a bug when showing list that made it to not render.
+        - Fixed the rendering of bool-buttons to look much better.
+        - Added aria-label-attribute to the main controls which are rendered with the parameter name shown, so it is read better by screen readers.
     </PackageReleaseNotes>
     <Authors>Yngve J. K. Hestem</Authors>
     <Copyright>Copyright (c) Yngve J. K. Hestem 2024</Copyright>
@@ -27,7 +29,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.18" />
-    <PackageReference Include="Radzen.Blazor" Version="4.30.0" />
+    <PackageReference Include="Radzen.Blazor" Version="4.30.1" />
     <PackageReference Include="YngveHestem.GenericParameterCollection" Version="1.1.1" />
   </ItemGroup>
 
