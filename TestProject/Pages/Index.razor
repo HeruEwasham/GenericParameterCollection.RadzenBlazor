@@ -68,8 +68,39 @@ Welcome to your new app.
                 { "maxDate", DateTime.Today.AddDays(10) }
             }
         },
-        { "A list of strings", new string[] {"Object 1", "Object 2", "Object 3" } },
-        { "Select one or more options (or none)", new string[] {}, new string[] { "Option 1", "Option 2", "Option 3", "Option 4", "Option 5", "Option 6" } }
+        { "A list of strings", new string[] { "Object 1", "Object 2", "Object 3" } },
+        { "Select one or more options (or none)", new string[] {}, new string[] { "Option 1", "Option 2", "Option 3", "Option 4", "Option 5", "Option 6" } },
+        { "A list of int's", new int[] { 1, 2, 3 } },
+        { "A list of float's", new float[] { 1.0f, 2.5f, 3.45f } },
+        { "A list of bool's", new bool[] { true, true, false } },
+        { "A list of date and time's", new DateTime[] { DateTime.Now, DateTime.UnixEpoch, DateTime.UtcNow } },
+        { "A list of only date's", new DateTime[] { DateTime.Now, DateTime.UnixEpoch, DateTime.UtcNow }, true },
+        { "A list of ParameterCollection with a few parameters",
+            new ParameterCollection[] {
+                new ParameterCollection
+                {
+                    { "Name", "Sherlock Holmes" },
+                    { "Work", "Detective" },
+                    { "Is fictional", true }
+                },
+                new ParameterCollection
+                {
+                    { "Name", "Albert Einstein" },
+                    { "Work", "Theoretical physicist" },
+                    { "Is fictional", false }
+                }
+            }, new ParameterCollection
+            {
+                { "defaultValue",
+                    new ParameterCollection
+                    {
+                        { "Name", string.Empty },
+                        { "Work", string.Empty },
+                        { "Is fictional", false }
+                    }
+                }
+            }
+        },
     };
 
         private ParameterCollectionViewOptions _options = new ParameterCollectionViewOptions

@@ -83,14 +83,17 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
             }
         }
 
-        public static List<Tuple<int, object>> GetNumberedlist(this IEnumerable<object> list)
+        public static List<Tuple<int, object>> GetNumberedList<TValue>(this IEnumerable<TValue> list)
         {
             var result = new List<Tuple<int, object>>();
             var i = 0;
             foreach(var item in list)
             {
-                result.Add(new Tuple<int, object>(i, item));
-                i++;
+                if (item != null)
+                {
+                    result.Add(new Tuple<int, object>(i, item));
+                    i++;
+                }
             }
             return result;
         }
