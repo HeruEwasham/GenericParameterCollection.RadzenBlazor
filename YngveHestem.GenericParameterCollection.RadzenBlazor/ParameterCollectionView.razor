@@ -9,7 +9,6 @@
             {
                 foreach (var parameter in _currentParameterCollection)
                 {
-                    Console.WriteLine("Test: " + parameter.Type.GetDefaultValueType().ToString());
                     var additionalInfo = parameter.GetAdditionalInfo();
                     var localOptions = Options;
                     if (Options.AdditionalInfoWillOverride && additionalInfo != null)
