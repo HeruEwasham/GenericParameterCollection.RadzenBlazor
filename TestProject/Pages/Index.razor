@@ -1,7 +1,9 @@
 ﻿@page "/"
 @using YngveHestem.GenericParameterCollection;
 @using YngveHestem.GenericParameterCollection.RadzenBlazor;
+@using YngveHestem.GenericParameterCollection.RadzenBlazor.ParameterComponents;
 @using Radzen;
+@using TestClasses;
 
 <PageTitle>Index</PageTitle>
 
@@ -13,7 +15,7 @@ Welcome to your new app.
 
 <Radzen.Blazor.RadzenCard>
     <Radzen.Blazor.RadzenText TextStyle="Radzen.Blazor.TextStyle.DisplayH2">Parameters</Radzen.Blazor.RadzenText>
-    <ParameterCollectionView @ref="_parameterCollectionView" ParameterCollection="@_parameters" Options="@_options" OnChange="@(args => {
+    <ParameterCollectionView @ref="_parameterCollectionView" ParameterCollection="@_parameters" Options="@_options" CustomParameterComponents="@_customComponents" OnChange="@(args => {
                                                                                                                                     _parameters = args.NewParameterCollection;
                                                                                                                                     Console.WriteLine($"{DateTime.Now}: ParameterCollection got update. Parameter updated was {args.ParameterKey ?? string.Empty}.");
                                                                                                                                     })"></ParameterCollectionView>
@@ -25,37 +27,43 @@ Welcome to your new app.
 
 @code {
     private ParameterCollection _parameters = new ParameterCollection
-    {
+{
         { "TestString", "This is a test" },
         { "TestString Multiline", "This is a test.\n\nTest123.", true },
         { "TestString Password", string.Empty, new ParameterCollection
-    {
+{
                 { "isPassword", true}
             }
         },
         { "TestInt", 15 },
         { "TestFloat", 15.01f },
         { "testFloat with desc", 15.05f, new ParameterCollection
-            {
+        {
                 { "name", "Testing Float with tooltip" },
                 { "tooltip", "This is a tooltip." }
             }
         },
         { "Some options", new ParameterCollection
-            {
+        {
                 { "string 1", "This is a string." },
                 { "Select an option", "Option 5", new string[] { "Option 1", "Option 2", "Option 3", "Option 4", "Option 5", "Option 6" } }
+            }
+        },
+        { "Example color with custom component", "rgb(0, 255, 0)",
+            new ParameterCollection
+        {
+                { "type", "color" }
             }
         },
         { "Select some bytes", new byte[] {1, 3, 5} },
         { "Are this any good (default version)?", true },
         { "Are this any good (checkbox veraion)?", true, new ParameterCollection
-            {
+        {
                 { "boolControl", "Checkbox" }
             }
         },
         { "Are this any good (switch veraion)?", true, new ParameterCollection
-            {
+        {
                 { "boolControl", "Switch" }
             }
         },
@@ -63,7 +71,7 @@ Welcome to your new app.
         { "Select a date and a time", DateTime.Now },
         { "Select a date", DateTime.Now, true },
         { "Select a date between today and 10 days from today", DateTime.Now, true, new ParameterCollection
-            {
+        {
                 { "minDate", DateTime.Today },
                 { "maxDate", DateTime.Today.AddDays(10) }
             }
@@ -78,22 +86,22 @@ Welcome to your new app.
         { "A list of ParameterCollection with a few parameters",
             new ParameterCollection[] {
                 new ParameterCollection
-                {
+            {
                     { "Name", "Sherlock Holmes" },
                     { "Work", "Detective" },
                     { "Is fictional", true }
                 },
                 new ParameterCollection
-                {
+            {
                     { "Name", "Albert Einstein" },
                     { "Work", "Theoretical physicist" },
                     { "Is fictional", false }
                 }
             }, new ParameterCollection
-            {
+        {
                 { "defaultValue",
                     new ParameterCollection
-                    {
+                {
                         { "Name", string.Empty },
                         { "Work", string.Empty },
                         { "Is fictional", false }
@@ -103,11 +111,16 @@ Welcome to your new app.
         },
     };
 
-        private ParameterCollectionViewOptions _options = new ParameterCollectionViewOptions
-        {
-            PlaceholderText = "This is a placeholder text.",
-            AllowFloatingLabel = false
-        };
+    private IParameterComponentDefinition[] _customComponents = new[]
+    {
+        new ColorParameterDefinition()
+    };
 
-        private ParameterCollectionView? _parameterCollectionView;
-    }
+    private ParameterCollectionViewOptions _options = new ParameterCollectionViewOptions
+    {
+        PlaceholderText = "This is a placeholder text.",
+        AllowFloatingLabel = false
+    };
+
+    private ParameterCollectionView? _parameterCollectionView;
+}
