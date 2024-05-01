@@ -38,6 +38,16 @@ When the event is triggered you will get an object that will contain both the ne
 
 Mark: If you use this OnChange-event, you must currently manually set the new ParameterCollection to the ParameterCollection that is referenced in the component before the OnChange-event has exited. If not you may see that Blazor reloads the last version of the ParameterCollection.
 
+##### CustomParameterComponents
+
+Here you can define a list of custom comonent definitions.
+
+This can be good to use if you for instance want a color picker for picking some colors, or have your own component you want to use for some parameter.
+
+##### CustomConverters
+
+Do you have some custom converters you need to use for converting some custom value, or want to change how some value is converted in the ParameterCollectionView? Then you can define a list of theese here.
+
 #### Example code
 
 The example-code below sets the ParameterCollection inside a RadzenCard that also has a heading with the text "Parameters". This is gotten from the TestProject. See that to get even more understanding by how it is used.
