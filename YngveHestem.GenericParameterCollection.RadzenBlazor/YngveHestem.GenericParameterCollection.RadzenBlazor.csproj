@@ -5,14 +5,10 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 
-    <Version>1.0.0-beta06</Version>
+    <Version>1.0.0</Version>
     <Description>This provides controls for using GenericParameterCollection in a Blazor-application by using Radzen.Blazor-components.</Description>
     <PackageReleaseNotes>
-        - Updated Radzen.Blazor to version 4.32.6.
-        - Updated TargetFramework to net8.0 as net7.0 is now EOL.
-        - Changed the code so MouseEnter-event on a parameter is only set if it should show a tooltip. This made the package noticably more performant.
-        - Changed how the parameter-area of an IEnumerable of ParameterCollection is rendered, so it's better visually. This includes adding the delete-button for this stright below the given item, instead of floating on top.
-        - Changed so the Delete-button on ienumerable-parameters is not only disabled when in ReadOnly-mode, but also not added at all (like the add-button).
+        - Initial main release with latest Radzen.Blazor (version 4.32.7) and latest GenericParameterCollection (version 1.1.2).
     </PackageReleaseNotes>
     <Authors>Yngve J. K. Hestem</Authors>
     <Copyright>Copyright (c) Yngve J. K. Hestem 2024</Copyright>
@@ -30,8 +26,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.6" />
-    <PackageReference Include="Radzen.Blazor" Version="4.32.6" />
-    <PackageReference Include="YngveHestem.GenericParameterCollection" Version="1.1.1" />
+    <PackageReference Include="Radzen.Blazor" Version="4.32.7" />
+    <PackageReference Include="YngveHestem.GenericParameterCollection" Version="1.1.2" />
   </ItemGroup>
 
   <ItemGroup>
