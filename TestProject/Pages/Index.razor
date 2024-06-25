@@ -9,10 +9,6 @@
 
 <h1>Hello, world!</h1>
 
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
-
 <Radzen.Blazor.RadzenCard>
     <Radzen.Blazor.RadzenText TextStyle="Radzen.Blazor.TextStyle.DisplayH2">Parameters</Radzen.Blazor.RadzenText>
     <ParameterCollectionView @ref="_parameterCollectionView" ParameterCollection="@_parameters" Options="@_options" CustomParameterComponents="@_customComponents" OnChange="@(args => {
@@ -86,19 +82,19 @@ Welcome to your new app.
         { "A list of ParameterCollection with a few parameters",
             new ParameterCollection[] {
                 new ParameterCollection
-            {
+                {
                     { "Name", "Sherlock Holmes" },
                     { "Work", "Detective" },
                     { "Is fictional", true }
                 },
                 new ParameterCollection
-            {
+                {
                     { "Name", "Albert Einstein" },
                     { "Work", "Theoretical physicist" },
                     { "Is fictional", false }
                 }
             }, new ParameterCollection
-        {
+            {
                 { "defaultValue",
                     new ParameterCollection
                 {
@@ -109,6 +105,51 @@ Welcome to your new app.
                 }
             }
         },
+
+        // Bools with extra parameters:
+        { "Bool with extra parameters if true", false, new ParameterCollection 
+            {
+                { "parametersIf:true", new ParameterCollection 
+                    {
+                        { "Do you like this?", true },
+                        { "Comment", string.Empty }
+                    }
+                }
+            }
+       },
+       { "Bool with extra parameters if both true and false", false, new ParameterCollection 
+            {
+                { "parametersIf:true", new ParameterCollection 
+                    {
+                        { "Do you like this?", true },
+                        { "Comment", string.Empty }
+                    }
+                },
+                { "parametersIf:false", new ParameterCollection 
+                    {
+                        { "Why is this not set to true?", string.Empty }
+                    }
+                },
+            }
+       },
+       { "Bool with extra parameters if true with name on extra parameters (and a small additional question if not)", false, new ParameterCollection 
+            {
+                { "parametersIf:true", new ParameterCollection 
+                    {
+                        { "Do you like this?", true },
+                        { "Comment", string.Empty }
+                    }
+                },
+                { "parametersIf:false", new ParameterCollection 
+                    {
+                        { "Why is this not set to true?", string.Empty }
+                    }
+                },
+                { "parametersIf:true:name", "Then we need some more input" },
+                { "parametersIf:false:name", "Ok, can we ask one additional question?" },
+                { "parentTypeWhenHavingExtraParameters", ExtraParametersParentType.RadzenFieldsetOnOnlyCollection }
+            }
+       }
     };
 
     private IParameterComponentDefinition[] _customComponents = new[]

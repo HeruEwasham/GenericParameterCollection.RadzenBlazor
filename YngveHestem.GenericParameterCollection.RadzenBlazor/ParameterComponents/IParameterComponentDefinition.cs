@@ -1,4 +1,5 @@
 ﻿using System;
+using Radzen;
 using YngveHestem.GenericParameterCollection.ParameterValueConverters;
 
 namespace YngveHestem.GenericParameterCollection.RadzenBlazor.ParameterComponents
@@ -26,9 +27,11 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor.ParameterComponent
         /// <param name="additionalInfo">The additionalInfo-parameters already gotten for the parameter.</param>
         /// <param name="options">The options for the ParameterCollectionView, including any changes done by the parameters additionalInfo.</param>
         /// <param name="customConverters">Will be any customConverters added to the ParameterCollectionView.</param>
-        /// <param name="updateParameterValue">This action updates the given value to the correct parameter. The object inputted is the value that should be set as the new value. The value innputted here needs therefore to be a value that can be converted to Parameter's value. Either a default one or via one of the custom converters given.</param>
+        /// <param name="customParameterComponents">Will be any customParameterComponents added to the ParameterCollecyionView.</param>
+        /// <param name="updateParameterValue">This action updates the given value to the correct parameter. The object inputted is the value that should be set as the new value. The value innputted here needs therefore to be a value that can be converted to Parameter's value. Either a default one or via one of the custom converters given. If the second parameter is set to something other than null, the additionalInfo-parameter will be set to this.</param>
+        /// <param name="tooltipService">Service to use to add tooltip.</param>
         /// <returns></returns>
-        public Dictionary<string, object> GetComponentParameters(Parameter parameter, string parameterName, ParameterCollection additionalInfo, ParameterCollectionViewOptions options, IParameterValueConverter[]? customConverters, Action<object> updateParameterValue);
+        public Dictionary<string, object> GetComponentParameters(Parameter parameter, string parameterName, ParameterCollection additionalInfo, ParameterCollectionViewOptions options, IParameterValueConverter[]? customConverters, IParameterComponentDefinition[]? customParameterComponents, Action<object, ParameterCollection?> updateParameterValue, TooltipService tooltipService);
 
         /// <summary>
         /// Get the type of BlazorComponent to create.

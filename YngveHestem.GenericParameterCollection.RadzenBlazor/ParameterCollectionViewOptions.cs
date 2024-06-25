@@ -1,5 +1,6 @@
 ﻿using System;
 using Radzen;
+using YngveHestem.GenericParameterCollection.RadzenBlazor.ParameterComponents;
 
 namespace YngveHestem.GenericParameterCollection.RadzenBlazor
 {
@@ -270,6 +271,18 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
         [ParameterProperty("addEntryToListAriaDescription")]
         public string AddEntryToListAriaDescription = "Add a new entry to the list in parameter \"{0}\".";
 
+        /// <summary>
+        /// Defines how any parent component is shown when using "extra parameters" like "parametersIf:true" and "parametersIf:false".
+        /// </summary>
+        [ParameterProperty("parentTypeWhenHavingExtraParameters")]
+        public ExtraParametersParentType ParentTypeWhenHavingExtraParameters = ExtraParametersParentType.None;
+
+        /// <summary>
+        /// Specifies the text used on the the collection of extra parameters (not all ParentTypeWhenHavingExtraParameters-options use it). You can use {0} to get the parameterName of the main parameter and use {1} to get the value of the main parameter.
+        /// </summary>
+        [ParameterProperty("extraParametersName")]
+        public string ExtraParametersName = "Extra parameters when {0} is {1}";
+
         public ParameterCollectionViewOptions CreateCopy()
         {
             return new ParameterCollectionViewOptions
@@ -317,7 +330,9 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
                 AddEntryToListText = AddEntryToListText,
                 DeleteEntryFromListText = DeleteEntryFromListText,
                 DeleteEntryFromListAriaDescription = DeleteEntryFromListAriaDescription,
-                AddEntryToListAriaDescription = AddEntryToListAriaDescription
+                AddEntryToListAriaDescription = AddEntryToListAriaDescription,
+                ParentTypeWhenHavingExtraParameters = ParentTypeWhenHavingExtraParameters,
+                ExtraParametersName = ExtraParametersName
             };
         }
         /// <summary>
@@ -580,6 +595,16 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
             if (parameters.HasKeyAndCanConvertTo("addEntryToListAriaDescription", typeof(string)))
             {
                 options.AddEntryToListAriaDescription = parameters.GetByKey<string>("addEntryToListAriaDescription");
+            }
+
+            if (parameters.HasKeyAndCanConvertTo("parentTypeWhenHavingExtraParameters", typeof(ExtraParametersParentType)))
+            {
+                options.ParentTypeWhenHavingExtraParameters = parameters.GetByKey<ExtraParametersParentType>("parentTypeWhenHavingExtraParameters");
+            }
+
+            if (parameters.HasKeyAndCanConvertTo("extraParametersName", typeof(string)))
+            {
+                options.ExtraParametersName = parameters.GetByKey<string>("extraParametersName");
             }
 
             return options;
