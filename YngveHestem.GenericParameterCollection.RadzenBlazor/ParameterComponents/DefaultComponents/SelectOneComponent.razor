@@ -1,0 +1,103 @@
+﻿@using Radzen.Blazor
+@using YngveHestem.GenericParameterCollection.ParameterValueConverters
+@if (Choices.Any(c => AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:" + c, typeof(ParameterCollection))))
+{
+    if (Options.ParentTypeWhenHavingExtraParameters == ExtraParametersParentType.None)
+    {
+        <RadzenFormField Text="@ParameterName" AllowFloatingLabel="@Options.AllowFloatingLabel" Variant="@Options.ElementsDesignVariant" MouseEnter="@Tooltip">
+            <RadzenDropDown aria-label="@ParameterName" ReadOnly="@Options.ReadOnly" TValue="string" Placeholder="@Options.PlaceholderText" Data="@Choices" Value="@Value" Change="@((v) => 
+                            {
+                                Value = (string)v;
+                                Change(Value, null);
+                            })"></RadzenDropDown>
+        </RadzenFormField>
+        @if (AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:" + Value, typeof(ParameterCollection)))
+        {
+            <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:" + Value))" Options="@Options" OnChange="@((args) => 
+            {
+                AdditionalInfo.GetParameterByKey("parametersIf:" + Value).SetValue(args.NewParameterCollection);
+                Change(Value, AdditionalInfo);
+            })" CustomConverters="@CustomConverters" CustomParameterComponents="@CustomParameterComponents"></ParameterCollectionView>
+        }
+    }
+    else if (Options.ParentTypeWhenHavingExtraParameters == ExtraParametersParentType.RadzenFieldsetOnOnlyCollection)
+    {
+        <RadzenFormField Text="@ParameterName" AllowFloatingLabel="@Options.AllowFloatingLabel" Variant="@Options.ElementsDesignVariant" MouseEnter="@Tooltip">
+            <RadzenDropDown aria-label="@ParameterName" ReadOnly="@Options.ReadOnly" TValue="string" Placeholder="@Options.PlaceholderText" Data="@Choices" Value="@Value" Change="@((v) => 
+                            {
+                                Value = (string)v;
+                                Change(Value, null);
+                            })"></RadzenDropDown>
+        </RadzenFormField>
+        @if (AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:" + Value, typeof(ParameterCollection)))
+        {
+            var extraParametersName = string.Format(Options.ExtraParametersName, ParameterName, Value);
+            if (AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:" + Value + ":name", typeof(string)))
+            {
+                extraParametersName = AdditionalInfo.GetByKey<string>("parametersIf:" + Value + ":name");
+            }
+            <RadzenFieldset Text="@extraParametersName" MouseEnter="@Tooltip">
+                <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:" + Value))" Options="@Options" OnChange="@((args) => 
+                {
+                    AdditionalInfo.GetParameterByKey("parametersIf:" + Value).SetValue(args.NewParameterCollection);
+                    Change(Value, AdditionalInfo);
+                })" CustomConverters="@CustomConverters" CustomParameterComponents="@CustomParameterComponents"></ParameterCollectionView>
+            </RadzenFieldset>
+        }
+    }
+    else if  (Options.ParentTypeWhenHavingExtraParameters == ExtraParametersParentType.RadzenFieldsetOverWholeParameter)
+    {
+        <RadzenFieldset Text="@ParameterName" MouseEnter="@Tooltip">
+            <RadzenDropDown aria-label="@ParameterName" ReadOnly="@Options.ReadOnly" TValue="string" Placeholder="@Options.PlaceholderText" Data="@Choices" Value="@Value" Change="@((v) => 
+                            {
+                                Value = (string)v;
+                                Change(Value, null);
+                            })"></RadzenDropDown>
+            @if (AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:" + Value, typeof(ParameterCollection)))
+            {
+                <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:" + Value))" Options="@Options" OnChange="@((args) => 
+                {
+                    AdditionalInfo.GetParameterByKey("parametersIf:" + Value).SetValue(args.NewParameterCollection);
+                    Change(Value, AdditionalInfo);
+                })" CustomConverters="@CustomConverters" CustomParameterComponents="@CustomParameterComponents"></ParameterCollectionView>
+            }
+        </RadzenFieldset>
+    }
+}
+else {
+    <RadzenFormField Text="@ParameterName" AllowFloatingLabel="@Options.AllowFloatingLabel" Variant="@Options.ElementsDesignVariant" MouseEnter="@Tooltip">
+        <RadzenDropDown aria-label="@ParameterName" ReadOnly="@Options.ReadOnly" TValue="string" Placeholder="@Options.PlaceholderText" Data="@Choices" Value="@Value" Change="@((v) => 
+                            {
+                                Value = (string)v;
+                                Change(Value, null);
+                            })"></RadzenDropDown>
+    </RadzenFormField>
+}
+@code {
+    [Parameter]
+    public required string ParameterName { get; set; }
+
+    [Parameter]
+    public required string Value { get; set; }
+
+    [Parameter]
+    public required string[] Choices { get; set; }
+
+    [Parameter]
+    public required ParameterCollectionViewOptions Options { get; set; }
+
+    [Parameter]
+    public required Action<object, ParameterCollection?> Change { get; set; }
+    
+    [Parameter]
+    public required Action<ElementReference>? Tooltip { get; set; }
+
+    [Parameter]
+    public required ParameterCollection AdditionalInfo { get; set; }
+
+    [Parameter]
+    public required IParameterValueConverter[]? CustomConverters { get; set; }
+
+    [Parameter]
+    public required IParameterComponentDefinition[]? CustomParameterComponents { get; set; }
+}

@@ -8,7 +8,8 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
         internal static IParameterComponentDefinition[] DefaultParameterComponents = new IParameterComponentDefinition[] 
         {
             new BoolComponentDefinition(),
-            new ParameterCollectionComponentDefinition()
+            new ParameterCollectionComponentDefinition(),
+            new SelectOneComponentDefinition()
         };
         
 		public static ParameterCollection DeepCopyJson(this ParameterCollection parameters)

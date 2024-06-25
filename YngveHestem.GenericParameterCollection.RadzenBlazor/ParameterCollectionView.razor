@@ -119,10 +119,6 @@
                         {
                             <RadzenDatePicker aria-label="@parameterText" ReadOnly="@localOptions.ReadOnly" DateFormat="@localOptions.DateFormat" Placeholder="@localOptions.PlaceholderText" AllowClear="false" TValue="DateTime" ShowDays="true" ShowCalendarWeek="@localOptions.ShowCalenderWeek" Min="@localOptions.MinDate" Max="@localOptions.MaxDate" CalendarWeekTitle="@localOptions.CalendarWeekTitle" Value="@(parameter.GetValue<DateTime>(CustomConverters))" Change="(value) => ChangeParameter(parameter.Key, value)"></RadzenDatePicker>
                         }
-                        else if (parameter.Type == ParameterType.Enum || parameter.Type == ParameterType.SelectOne)
-                        {
-                            <RadzenDropDown aria-label="@parameterText" ReadOnly="@localOptions.ReadOnly" TValue="string" Placeholder="@localOptions.PlaceholderText" Data="@parameter.GetChoices()" Value="@(parameter.GetValue<string>(CustomConverters))" Change="(value) => ChangeParameter(parameter.Key, value)"></RadzenDropDown>
-                        }
                         else if (parameter.Type == ParameterType.SelectMany)
                         {
                             <RadzenDropDown aria-label="@parameterText" ReadOnly="@localOptions.ReadOnly" Multiple=true AllowClear=true MaxSelectedLabels="@localOptions.MaxSelectedLabels" Chips="@localOptions.ShowLabelsAsChips" SelectedItemsText="@localOptions.SelectedItemsText" SelectAllText="@localOptions.SelectAllItemsText" TValue="IEnumerable<string>" Placeholder="@localOptions.SelectAllItemsText" Data="@parameter.GetChoices()" Value="@(parameter.GetValue<string[]>(CustomConverters))" Change="(value) => ChangeParameter(parameter.Key, value)"></RadzenDropDown>

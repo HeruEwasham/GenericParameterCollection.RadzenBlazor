@@ -149,7 +149,57 @@
                 { "parametersIf:false:name", "Ok, can we ask one additional question?" },
                 { "parentTypeWhenHavingExtraParameters", ExtraParametersParentType.RadzenFieldsetOnOnlyCollection }
             }
-       }
+       },
+
+       // Enum and SelectOne-types with extra parameters:
+       { "Select which bool-control you like best", BoolControl.Switch, new ParameterCollection 
+            {
+                { "parametersIf:Checkbox", new ParameterCollection 
+                    {
+                        { "Do you like it because it is old-school?", true },
+                        { "Comment", string.Empty }
+                    }
+                }
+            }
+       },
+       { "Select which bool-control you like best with more extra parameters", BoolControl.Switch, new ParameterCollection 
+            {
+                { "parametersIf:Checkbox", new ParameterCollection 
+                    {
+                        { "Do you like it because it is old-school?", true },
+                        { "Comment", string.Empty }
+                    }
+                },
+                { "parametersIf:Switch", new ParameterCollection 
+                    {
+                        { "When was you born?", DateTime.Now, true },
+                        { "Comment", string.Empty }
+                    }
+                },
+                { "parametersIf:Checkbox:name", "I do wonder..." },
+                { "parentTypeWhenHavingExtraParameters", ExtraParametersParentType.RadzenFieldsetOnOnlyCollection }
+            }
+       },
+       { "Which of theese artists do you like best", "Elvis", new string[] {"Rihanna", "Elvis", "Elton John", "AC/DC", "ABBA"}, new ParameterCollection 
+            {
+                { "parametersIf:Elvis", new ParameterCollection 
+                    {
+                        { "You know he is dead?", true },
+                    }
+                },
+                { "parametersIf:AC/DC", new ParameterCollection 
+                    {
+                        { "Do you like Thunderstruck", true },
+                    }
+                },
+                { "parametersIf:ABBA", new ParameterCollection 
+                    {
+                        { "Which country are they from?", string.Empty },
+                    }
+                },
+                { "parentTypeWhenHavingExtraParameters", ExtraParametersParentType.RadzenFieldsetOverWholeParameter }
+            }
+       },
     };
 
     private IParameterComponentDefinition[] _customComponents = new[]
