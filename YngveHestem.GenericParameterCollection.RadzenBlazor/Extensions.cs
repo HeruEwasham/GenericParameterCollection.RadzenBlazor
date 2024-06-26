@@ -1,10 +1,18 @@
-﻿using System;
-using System.Xml.Linq;
+﻿using YngveHestem.GenericParameterCollection.RadzenBlazor.ParameterComponents;
+using YngveHestem.GenericParameterCollection.RadzenBlazor.ParameterComponents.DefaultComponents;
 
 namespace YngveHestem.GenericParameterCollection.RadzenBlazor
 {
-	internal static class Extensions
+    internal static class Extensions
 	{
+        internal static IParameterComponentDefinition[] DefaultParameterComponents = new IParameterComponentDefinition[] 
+        {
+            new BoolComponentDefinition(),
+            new ParameterCollectionComponentDefinition(),
+            new SelectOneComponentDefinition(),
+            new SelectManyComponentDefinition()
+        };
+        
 		public static ParameterCollection DeepCopyJson(this ParameterCollection parameters)
 		{
 			return ParameterCollection.FromJson(parameters.ToJson());
@@ -118,6 +126,16 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
             {
                 return default(TValue);
             }
+        }
+
+        internal static Dictionary<string, TValue> GetAsDictionary<TValue>(this ParameterCollection parameters) 
+        {
+            var result = new Dictionary<string, TValue>();
+            foreach (var parameter in parameters)
+            {
+                result.Add(parameter.Key, parameter.GetValue<TValue>());
+            }
+            return result;
         }
     }
 }

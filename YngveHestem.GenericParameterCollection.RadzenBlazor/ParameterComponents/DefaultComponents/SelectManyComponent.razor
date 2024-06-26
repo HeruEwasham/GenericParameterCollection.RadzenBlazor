@@ -1,0 +1,217 @@
+﻿@using Radzen.Blazor
+@using YngveHestem.GenericParameterCollection.ParameterValueConverters
+@if (Choices.Any(c => AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:" + c, typeof(ParameterCollection))))
+{
+    if (Options.ParentTypeWhenHavingExtraParameters == ExtraParametersParentType.None)
+    {
+        <RadzenFormField Text="@ParameterName" AllowFloatingLabel="@Options.AllowFloatingLabel" Variant="@Options.ElementsDesignVariant" MouseEnter="@Tooltip">
+            <RadzenDropDown aria-label="@ParameterName" ReadOnly="@Options.ReadOnly" Multiple=true AllowClear=true MaxSelectedLabels="@Options.MaxSelectedLabels" Chips="@Options.ShowLabelsAsChips" SelectedItemsText="@Options.SelectedItemsText" SelectAllText="@Options.SelectAllItemsText" TValue="IEnumerable<string>" Placeholder="@Options.SelectAllItemsText" Data="@(ValueToPretty(Choices))" Value="@PrettyValue" Change="@((v) => 
+                            {
+                                PrettyValue = ((IEnumerable<string>)v).ToArray();
+                                Change(Value, null);
+                            })"></RadzenDropDown>
+        </RadzenFormField>
+        @foreach(var item in Value) 
+        {
+            @if (AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:" + item, typeof(ParameterCollection)))
+            {
+                if (Options.SelectManyExtraParametersGetOwnParent)
+                {
+                    var extraParametersName = string.Format(Options.ExtraParametersName, ParameterName, ValueToPretty(item));
+                    if (AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:" + item + ":name", typeof(string)))
+                    {
+                        extraParametersName = AdditionalInfo.GetByKey<string>("parametersIf:" + item + ":name");
+                    }
+                    <RadzenFieldset Text="@extraParametersName">
+                        <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:" + item))" Options="@Options" OnChange="@((args) => 
+                        {
+                            AdditionalInfo.GetParameterByKey("parametersIf:" + item).SetValue(args.NewParameterCollection);
+                            Change(Value, AdditionalInfo);
+                        })" CustomConverters="@CustomConverters" CustomParameterComponents="@CustomParameterComponents"></ParameterCollectionView>
+                    </RadzenFieldset>
+                }
+                else {
+                    <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:" + item))" Options="@Options" OnChange="@((args) => 
+                    {
+                        AdditionalInfo.GetParameterByKey("parametersIf:" + item).SetValue(args.NewParameterCollection);
+                        Change(Value, AdditionalInfo);
+                    })" CustomConverters="@CustomConverters" CustomParameterComponents="@CustomParameterComponents"></ParameterCollectionView>
+                }
+            }
+        }
+    }
+    else if (Options.ParentTypeWhenHavingExtraParameters == ExtraParametersParentType.RadzenFieldsetOnOnlyCollection)
+    {
+        <RadzenFormField Text="@ParameterName" AllowFloatingLabel="@Options.AllowFloatingLabel" Variant="@Options.ElementsDesignVariant" MouseEnter="@Tooltip">
+            <RadzenDropDown aria-label="@ParameterName" ReadOnly="@Options.ReadOnly" Multiple=true AllowClear=true MaxSelectedLabels="@Options.MaxSelectedLabels" Chips="@Options.ShowLabelsAsChips" SelectedItemsText="@Options.SelectedItemsText" SelectAllText="@Options.SelectAllItemsText" TValue="IEnumerable<string>" Placeholder="@Options.SelectAllItemsText" Data="@(ValueToPretty(Choices))" Value="@PrettyValue" Change="@((v) => 
+                            {
+                                PrettyValue = ((IEnumerable<string>)v).ToArray();
+                                Change(Value, null);
+                            })"></RadzenDropDown>
+        </RadzenFormField>
+        @if (Value.Any(c => AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:" + c, typeof(ParameterCollection))))
+        {
+            <RadzenFieldset Text="@Options.SelectManyExtraParametersName">
+                @foreach(var item in Value) 
+                {
+                    @if (AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:" + item, typeof(ParameterCollection)))
+                    {
+                        if (Options.SelectManyExtraParametersGetOwnParent) 
+                        {
+                            var extraParametersName = string.Format(Options.ExtraParametersName, ParameterName, item);
+                            if (AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:" + item + ":name", typeof(string)))
+                            {
+                                extraParametersName = AdditionalInfo.GetByKey<string>("parametersIf:" + item + ":name");
+                            }
+                            <RadzenFieldset Text="@extraParametersName">
+                                <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:" + item))" Options="@Options" OnChange="@((args) => 
+                                {
+                                    AdditionalInfo.GetParameterByKey("parametersIf:" + item).SetValue(args.NewParameterCollection);
+                                    Change(Value, AdditionalInfo);
+                                })" CustomConverters="@CustomConverters" CustomParameterComponents="@CustomParameterComponents"></ParameterCollectionView>
+                            </RadzenFieldset>
+                        }
+                        else {
+                            <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:" + item))" Options="@Options" OnChange="@((args) => 
+                            {
+                                AdditionalInfo.GetParameterByKey("parametersIf:" + item).SetValue(args.NewParameterCollection);
+                                Change(Value, AdditionalInfo);
+                            })" CustomConverters="@CustomConverters" CustomParameterComponents="@CustomParameterComponents"></ParameterCollectionView>
+                        }
+                    }
+                }
+            </RadzenFieldset>
+        }
+    }
+    else if  (Options.ParentTypeWhenHavingExtraParameters == ExtraParametersParentType.RadzenFieldsetOverWholeParameter)
+    {
+        <RadzenFieldset Text="@ParameterName" MouseEnter="@Tooltip">
+            <RadzenDropDown aria-label="@ParameterName" ReadOnly="@Options.ReadOnly" Multiple=true AllowClear=true MaxSelectedLabels="@Options.MaxSelectedLabels" Chips="@Options.ShowLabelsAsChips" SelectedItemsText="@Options.SelectedItemsText" SelectAllText="@Options.SelectAllItemsText" TValue="IEnumerable<string>" Placeholder="@Options.SelectAllItemsText" Data="@(ValueToPretty(Choices))" Value="@PrettyValue" Change="@((v) => 
+                            {
+                                PrettyValue = ((IEnumerable<string>)v).ToArray();
+                                Change(Value, null);
+                            })"></RadzenDropDown>
+            @foreach(var item in Value) 
+            {
+                @if (AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:" + item, typeof(ParameterCollection)))
+                {
+                    if (Options.SelectManyExtraParametersGetOwnParent) {
+                        var extraParametersName = string.Format(Options.ExtraParametersName, ParameterName, item);
+                        if (AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:" + item + ":name", typeof(string)))
+                        {
+                            extraParametersName = AdditionalInfo.GetByKey<string>("parametersIf:" + item + ":name");
+                        }
+                        <RadzenFieldset Text="@extraParametersName">
+                            <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:" + item))" Options="@Options" OnChange="@((args) => 
+                            {
+                                AdditionalInfo.GetParameterByKey("parametersIf:" + item).SetValue(args.NewParameterCollection);
+                                Change(Value, AdditionalInfo);
+                            })" CustomConverters="@CustomConverters" CustomParameterComponents="@CustomParameterComponents"></ParameterCollectionView>
+                        </RadzenFieldset>
+                    }
+                    else {
+                        <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:" + item))" Options="@Options" OnChange="@((args) => 
+                        {
+                            AdditionalInfo.GetParameterByKey("parametersIf:" + item).SetValue(args.NewParameterCollection);
+                            Change(Value, AdditionalInfo);
+                        })" CustomConverters="@CustomConverters" CustomParameterComponents="@CustomParameterComponents"></ParameterCollectionView>
+                    }
+                }
+            }
+        </RadzenFieldset>
+    }
+}
+else {
+    <RadzenFormField Text="@ParameterName" AllowFloatingLabel="@Options.AllowFloatingLabel" Variant="@Options.ElementsDesignVariant" MouseEnter="@Tooltip">
+        <RadzenDropDown aria-label="@ParameterName" ReadOnly="@Options.ReadOnly" Multiple=true AllowClear=true MaxSelectedLabels="@Options.MaxSelectedLabels" Chips="@Options.ShowLabelsAsChips" SelectedItemsText="@Options.SelectedItemsText" SelectAllText="@Options.SelectAllItemsText" TValue="IEnumerable<string>" Placeholder="@Options.SelectAllItemsText" Data="@(ValueToPretty(Choices))" Value="@PrettyValue" Change="@((v) => 
+                            {
+                                PrettyValue = ((IEnumerable<string>)v).ToArray();
+                                Change(Value, null);
+                            })"></RadzenDropDown>
+    </RadzenFormField>
+}
+@code {
+    [Parameter]
+    public required string ParameterName { get; set; }
+
+    [Parameter]
+    public required string[] Value { get; set; }
+
+    public string[] PrettyValue 
+    { 
+        get 
+        {
+            return ValueToPretty(Value);
+        } 
+        set 
+        {
+            Value = PrettyToValue(value);
+        } 
+    }
+
+    [Parameter]
+    public required string[] Choices { get; set; }
+
+    [Parameter]
+    public required ParameterCollectionViewOptions Options { get; set; }
+
+    [Parameter]
+    public required Action<object, ParameterCollection?> Change { get; set; }
+    
+    [Parameter]
+    public required Action<ElementReference>? Tooltip { get; set; }
+
+    [Parameter]
+    public required ParameterCollection AdditionalInfo { get; set; }
+
+    [Parameter]
+    public required IParameterValueConverter[]? CustomConverters { get; set; }
+
+    [Parameter]
+    public required IParameterComponentDefinition[]? CustomParameterComponents { get; set; }
+
+    [Parameter]
+    public Dictionary<string, string>? ValueToPrettyDictionary { get; set; }
+
+    private string[] PrettyToValue(string[] value) 
+    {
+        if (ValueToPrettyDictionary == null)
+        {
+            return value;
+        }
+
+        var res = new List<string>();
+        foreach(var item in value) 
+        {
+            if (ValueToPrettyDictionary.ContainsValue(item))
+            {
+                res.Add(ValueToPrettyDictionary.First(v => v.Value == item).Key);
+            }
+            else 
+            {
+                res.Add(item);
+            }
+        }
+        return res.ToArray();
+    }
+
+    private string ValueToPretty(string value) 
+    {
+        if (ValueToPrettyDictionary == null || !ValueToPrettyDictionary.ContainsKey(value))
+        {
+            return value;
+        }
+
+        return ValueToPrettyDictionary[value];
+    }
+
+    private string[] ValueToPretty(string[] value) 
+    {
+        if (ValueToPrettyDictionary == null)
+        {
+            return value;
+        }
+
+        return value.Select(v => ValueToPretty(v)).ToArray();
+    }
+}
