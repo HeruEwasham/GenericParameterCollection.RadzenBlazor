@@ -5,9 +5,9 @@
     if (Options.ParentTypeWhenHavingExtraParameters == ExtraParametersParentType.None)
     {
         <RadzenFormField Text="@ParameterName" AllowFloatingLabel="@Options.AllowFloatingLabel" Variant="@Options.ElementsDesignVariant" MouseEnter="@Tooltip">
-            <RadzenDropDown aria-label="@ParameterName" ReadOnly="@Options.ReadOnly" TValue="string" Placeholder="@Options.PlaceholderText" Data="@Choices" Value="@Value" Change="@((v) => 
+            <RadzenDropDown aria-label="@ParameterName" ReadOnly="@Options.ReadOnly" TValue="string" Placeholder="@Options.PlaceholderText" Data="@(ValueToPretty(Choices))" Value="@PrettyValue" Change="@((v) => 
                             {
-                                Value = (string)v;
+                                Value = PrettyToValue((string)v);
                                 Change(Value, null);
                             })"></RadzenDropDown>
         </RadzenFormField>
@@ -23,15 +23,15 @@
     else if (Options.ParentTypeWhenHavingExtraParameters == ExtraParametersParentType.RadzenFieldsetOnOnlyCollection)
     {
         <RadzenFormField Text="@ParameterName" AllowFloatingLabel="@Options.AllowFloatingLabel" Variant="@Options.ElementsDesignVariant" MouseEnter="@Tooltip">
-            <RadzenDropDown aria-label="@ParameterName" ReadOnly="@Options.ReadOnly" TValue="string" Placeholder="@Options.PlaceholderText" Data="@Choices" Value="@Value" Change="@((v) => 
+            <RadzenDropDown aria-label="@ParameterName" ReadOnly="@Options.ReadOnly" TValue="string" Placeholder="@Options.PlaceholderText" Data="@(ValueToPretty(Choices))" Value="@PrettyValue" Change="@((v) => 
                             {
-                                Value = (string)v;
+                                Value = PrettyToValue((string)v);
                                 Change(Value, null);
                             })"></RadzenDropDown>
         </RadzenFormField>
         @if (AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:" + Value, typeof(ParameterCollection)))
         {
-            var extraParametersName = string.Format(Options.ExtraParametersName, ParameterName, Value);
+            var extraParametersName = string.Format(Options.ExtraParametersName, ParameterName, PrettyValue);
             if (AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:" + Value + ":name", typeof(string)))
             {
                 extraParametersName = AdditionalInfo.GetByKey<string>("parametersIf:" + Value + ":name");
@@ -48,9 +48,9 @@
     else if  (Options.ParentTypeWhenHavingExtraParameters == ExtraParametersParentType.RadzenFieldsetOverWholeParameter)
     {
         <RadzenFieldset Text="@ParameterName" MouseEnter="@Tooltip">
-            <RadzenDropDown aria-label="@ParameterName" ReadOnly="@Options.ReadOnly" TValue="string" Placeholder="@Options.PlaceholderText" Data="@Choices" Value="@Value" Change="@((v) => 
+            <RadzenDropDown aria-label="@ParameterName" ReadOnly="@Options.ReadOnly" TValue="string" Placeholder="@Options.PlaceholderText" Data="@(ValueToPretty(Choices))" Value="@PrettyValue" Change="@((v) => 
                             {
-                                Value = (string)v;
+                                Value = PrettyToValue((string)v);
                                 Change(Value, null);
                             })"></RadzenDropDown>
             @if (AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:" + Value, typeof(ParameterCollection)))
@@ -66,9 +66,9 @@
 }
 else {
     <RadzenFormField Text="@ParameterName" AllowFloatingLabel="@Options.AllowFloatingLabel" Variant="@Options.ElementsDesignVariant" MouseEnter="@Tooltip">
-        <RadzenDropDown aria-label="@ParameterName" ReadOnly="@Options.ReadOnly" TValue="string" Placeholder="@Options.PlaceholderText" Data="@Choices" Value="@Value" Change="@((v) => 
+        <RadzenDropDown aria-label="@ParameterName" ReadOnly="@Options.ReadOnly" TValue="string" Placeholder="@Options.PlaceholderText" Data="@(ValueToPretty(Choices))" Value="@PrettyValue" Change="@((v) => 
                             {
-                                Value = (string)v;
+                                Value = PrettyToValue((string)v);
                                 Change(Value, null);
                             })"></RadzenDropDown>
     </RadzenFormField>
@@ -79,6 +79,18 @@ else {
 
     [Parameter]
     public required string Value { get; set; }
+
+    public string PrettyValue 
+    { 
+        get 
+        {
+            return ValueToPretty(Value);
+        } 
+        set 
+        {
+            Value = PrettyToValue(value);
+        } 
+    }
 
     [Parameter]
     public required string[] Choices { get; set; }
@@ -100,4 +112,37 @@ else {
 
     [Parameter]
     public required IParameterComponentDefinition[]? CustomParameterComponents { get; set; }
+
+    [Parameter]
+    public Dictionary<string, string>? ValueToPrettyDictionary { get; set; }
+
+    private string PrettyToValue(string value) 
+    {
+        if (ValueToPrettyDictionary == null || !ValueToPrettyDictionary.ContainsValue(value))
+        {
+            return value;
+        }
+
+        return ValueToPrettyDictionary.First(v => v.Value == value).Key;
+    }
+
+    private string ValueToPretty(string value) 
+    {
+        if (ValueToPrettyDictionary == null || !ValueToPrettyDictionary.ContainsKey(value))
+        {
+            return value;
+        }
+
+        return ValueToPrettyDictionary[value];
+    }
+
+    private string[] ValueToPretty(string[] value) 
+    {
+        if (ValueToPrettyDictionary == null)
+        {
+            return value;
+        }
+
+        return value.Select(v => ValueToPretty(v)).ToArray();
+    }
 }

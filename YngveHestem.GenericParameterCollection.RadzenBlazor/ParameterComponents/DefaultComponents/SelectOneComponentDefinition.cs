@@ -13,6 +13,11 @@ public class SelectOneComponentDefinition : IParameterComponentDefinition
         {
             tooltip = (args) => {tooltipService.Open(args, additionalInfo.GetByKey<string>(options.TooltipParameterTextKey, customConverters), options.TooltipOptions);};
         }
+        Dictionary<string, string>? prettyValues = null;
+        if (additionalInfo.HasKeyAndCanConvertTo("prettyValues", typeof(ParameterCollection))) 
+        {
+            prettyValues = additionalInfo.GetByKey<ParameterCollection>("prettyValues").GetAsDictionary<string>();
+        }
         return new Dictionary<string, object> {
             { "ParameterName", parameterName },
             { "Value", parameter.GetValue<string>(customConverters) },
@@ -22,7 +27,8 @@ public class SelectOneComponentDefinition : IParameterComponentDefinition
             { "Tooltip", tooltip },
             { "AdditionalInfo", additionalInfo },
             { "CustomConverters", customConverters },
-            { "CustomParameterComponents", customParameterComponents }
+            { "CustomParameterComponents", customParameterComponents },
+            { "ValueToPrettyDictionary", prettyValues }
         };
     }
 

@@ -127,6 +127,16 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
                 return default(TValue);
             }
         }
+
+        internal static Dictionary<string, TValue> GetAsDictionary<TValue>(this ParameterCollection parameters) 
+        {
+            var result = new Dictionary<string, TValue>();
+            foreach (var parameter in parameters)
+            {
+                result.Add(parameter.Key, parameter.GetValue<TValue>());
+            }
+            return result;
+        }
     }
 }
 

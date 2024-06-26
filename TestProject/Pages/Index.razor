@@ -177,7 +177,12 @@
                     }
                 },
                 { "parametersIf:Checkbox:name", "I do wonder..." },
-                { "parentTypeWhenHavingExtraParameters", ExtraParametersParentType.RadzenFieldsetOnOnlyCollection }
+                { "parentTypeWhenHavingExtraParameters", ExtraParametersParentType.RadzenFieldsetOnOnlyCollection },
+                { "prettyValues", new ParameterCollection 
+                    {
+                        { "Checkbox", "The old checkbox" }
+                    }
+                }
             }
        },
        { "Which of theese artists do you like best", "Elvis", new string[] {"Rihanna", "Elvis", "Elton John", "AC/DC", "ABBA"}, new ParameterCollection 
@@ -215,6 +220,12 @@
                 { "parametersIf:ABBA", new ParameterCollection 
                     {
                         { "Which country are they from?", string.Empty },
+                    }
+                },
+                { "prettyValues", new ParameterCollection 
+                    {
+                        { "Elvis", "Elvis Presley" },
+                        { "Rihanna", "Robyn Rihanna Fenty" }
                     }
                 }
             }
