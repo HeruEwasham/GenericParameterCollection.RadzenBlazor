@@ -15,7 +15,7 @@ public class SelectOneComponentDefinition : IParameterComponentDefinition
         }
         return new Dictionary<string, object> {
             { "ParameterName", parameterName },
-            { "Value", parameter.GetValue<string>() },
+            { "Value", parameter.GetValue<string>(customConverters) },
             { "Choices", parameter.GetChoices().ToArray() },
             { "Options", options },
             { "Change", updateParameterValue },

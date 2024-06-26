@@ -10,7 +10,7 @@ public class ParameterCollectionComponentDefinition : IParameterComponentDefinit
     {
         return new Dictionary<string, object> 
         {
-            { "ParameterCollection", parameter.GetValue<ParameterCollection>() },
+            { "ParameterCollection", parameter.GetValue<ParameterCollection>(customConverters) },
             { "Options", options },
             { "OnChange", EventCallback.Factory.Create<ParameterCollectionViewOnChangeEventArgs>(this, (args) => updateParameterValue(args.NewParameterCollection, null)) },
             { "CustomConverters", customConverters },

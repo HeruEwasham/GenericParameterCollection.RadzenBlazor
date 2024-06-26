@@ -15,7 +15,7 @@ public class BoolComponentDefinition : IParameterComponentDefinition
         }
         return new Dictionary<string, object> {
             { "ParameterName", parameterName },
-            { "Value", parameter.GetValue<bool>() },
+            { "Value", parameter.GetValue<bool>(customConverters) },
             { "Options", options },
             { "Change", updateParameterValue },
             { "Tooltip", tooltip },
