@@ -9,7 +9,8 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
         {
             new BoolComponentDefinition(),
             new ParameterCollectionComponentDefinition(),
-            new SelectOneComponentDefinition()
+            new SelectOneComponentDefinition(),
+            new SelectManyComponentDefinition()
         };
         
 		public static ParameterCollection DeepCopyJson(this ParameterCollection parameters)

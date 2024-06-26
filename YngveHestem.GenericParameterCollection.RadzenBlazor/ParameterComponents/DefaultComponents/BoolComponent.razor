@@ -71,7 +71,7 @@
             {
                 extraParametersName = AdditionalInfo.GetByKey<string>("parametersIf:true:name");
             }
-            <RadzenFieldset Text="@extraParametersName" MouseEnter="@Tooltip">
+            <RadzenFieldset Text="@extraParametersName">
                 <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:true"))" Options="@Options" OnChange="@((args) => 
                 {
                     AdditionalInfo.GetParameterByKey("parametersIf:true").SetValue(args.NewParameterCollection);
@@ -86,7 +86,7 @@
             {
                 extraParametersName = AdditionalInfo.GetByKey<string>("parametersIf:false:name");
             }
-            <RadzenFieldset Text="@extraParametersName" MouseEnter="@Tooltip">
+            <RadzenFieldset Text="@extraParametersName">
                 <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:false"))" Options="@Options" OnChange="@((args) => 
                 {
                     AdditionalInfo.GetParameterByKey("parametersIf:false").SetValue(args.NewParameterCollection);

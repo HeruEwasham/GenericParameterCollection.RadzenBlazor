@@ -200,6 +200,25 @@
                 { "parentTypeWhenHavingExtraParameters", ExtraParametersParentType.RadzenFieldsetOverWholeParameter }
             }
        },
+       { "Select all the artists you like", Array.Empty<string>(), new string[] {"Rihanna", "Elvis", "Elton John", "AC/DC", "ABBA"}, new ParameterCollection 
+            {
+                { "parametersIf:Elvis", new ParameterCollection 
+                    {
+                        { "You know he is dead?", true },
+                    }
+                },
+                { "parametersIf:AC/DC", new ParameterCollection 
+                    {
+                        { "Do you like Thunderstruck", true },
+                    }
+                },
+                { "parametersIf:ABBA", new ParameterCollection 
+                    {
+                        { "Which country are they from?", string.Empty },
+                    }
+                }
+            }
+       }
     };
 
     private IParameterComponentDefinition[] _customComponents = new[]

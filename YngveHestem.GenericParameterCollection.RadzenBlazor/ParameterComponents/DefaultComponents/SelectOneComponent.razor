@@ -36,7 +36,7 @@
             {
                 extraParametersName = AdditionalInfo.GetByKey<string>("parametersIf:" + Value + ":name");
             }
-            <RadzenFieldset Text="@extraParametersName" MouseEnter="@Tooltip">
+            <RadzenFieldset Text="@extraParametersName">
                 <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:" + Value))" Options="@Options" OnChange="@((args) => 
                 {
                     AdditionalInfo.GetParameterByKey("parametersIf:" + Value).SetValue(args.NewParameterCollection);

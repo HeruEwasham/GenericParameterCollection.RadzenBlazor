@@ -283,6 +283,18 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
         [ParameterProperty("extraParametersName")]
         public string ExtraParametersName = "Extra parameters when {0} is {1}";
 
+        /// <summary>
+        /// Should each extra parameter-collection (one for each value that has one), get it's own visible parent (RadzenFieldset). ExtraParametersParentType will here decide if all the given collections should have one too or not.
+        /// </summary>
+        [ParameterProperty("selectManyExtraParametersGetOwnParent")]
+        public bool SelectManyExtraParametersGetOwnParent = true;
+
+        /// <summary>
+        /// Specifies the text used on the the total collection of extra parameters for SelectMany-parameters (not all ParentTypeWhenHavingExtraParameters-options use it). You can use {0} to get the parameterName of the main parameter.
+        /// </summary>
+        [ParameterProperty("selectManyExtraParametersName")]
+        public string SelectManyExtraParametersName = "Extra parameters when {0} has theese values";
+
         public ParameterCollectionViewOptions CreateCopy()
         {
             return new ParameterCollectionViewOptions
@@ -332,7 +344,9 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
                 DeleteEntryFromListAriaDescription = DeleteEntryFromListAriaDescription,
                 AddEntryToListAriaDescription = AddEntryToListAriaDescription,
                 ParentTypeWhenHavingExtraParameters = ParentTypeWhenHavingExtraParameters,
-                ExtraParametersName = ExtraParametersName
+                ExtraParametersName = ExtraParametersName,
+                SelectManyExtraParametersGetOwnParent = SelectManyExtraParametersGetOwnParent,
+                SelectManyExtraParametersName = SelectManyExtraParametersName
             };
         }
         /// <summary>
@@ -605,6 +619,16 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
             if (parameters.HasKeyAndCanConvertTo("extraParametersName", typeof(string)))
             {
                 options.ExtraParametersName = parameters.GetByKey<string>("extraParametersName");
+            }
+
+            if (parameters.HasKeyAndCanConvertTo("selectManyExtraParametersGetOwnParent", typeof(bool)))
+            {
+                options.SelectManyExtraParametersGetOwnParent = parameters.GetByKey<bool>("selectManyExtraParametersGetOwnParent");
+            }
+
+            if (parameters.HasKeyAndCanConvertTo("selectManyExtraParametersName", typeof(string)))
+            {
+                options.SelectManyExtraParametersName = parameters.GetByKey<string>("selectManyExtraParametersName");
             }
 
             return options;
