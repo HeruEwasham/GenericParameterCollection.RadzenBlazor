@@ -7,7 +7,9 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
 	{
         internal static IParameterComponentDefinition[] DefaultParameterComponents = new IParameterComponentDefinition[] 
         {
+            new IntDecimalComponentDefinition(),
             new BoolComponentDefinition(),
+            new DateTimeComponentDefinition(),
             new ParameterCollectionComponentDefinition(),
             new SelectOneComponentDefinition(),
             new SelectManyComponentDefinition()

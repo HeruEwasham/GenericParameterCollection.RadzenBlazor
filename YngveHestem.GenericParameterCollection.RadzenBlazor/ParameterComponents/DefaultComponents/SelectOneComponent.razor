@@ -13,7 +13,12 @@
         </RadzenFormField>
         @if (AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:" + Value, typeof(ParameterCollection)))
         {
-            <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:" + Value))" Options="@Options" OnChange="@((args) => 
+            var localOptions = Options;
+            if (Options.AdditionalInfoWillOverride && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:" + Value + ":options", typeof(ParameterCollection)))
+            {
+                localOptions = ParameterCollectionViewOptions.CreateFromParameterCollection(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:" + Value + ":options"), Options);
+            }
+            <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:" + Value))" Options="@localOptions" OnChange="@((args) => 
             {
                 AdditionalInfo.GetParameterByKey("parametersIf:" + Value).SetValue(args.NewParameterCollection);
                 Change(Value, AdditionalInfo);
@@ -36,8 +41,13 @@
             {
                 extraParametersName = AdditionalInfo.GetByKey<string>("parametersIf:" + Value + ":name");
             }
+            var localOptions = Options;
+            if (Options.AdditionalInfoWillOverride && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:" + Value + ":options", typeof(ParameterCollection)))
+            {
+                localOptions = ParameterCollectionViewOptions.CreateFromParameterCollection(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:" + Value + ":options"), Options);
+            }
             <RadzenFieldset Text="@extraParametersName">
-                <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:" + Value))" Options="@Options" OnChange="@((args) => 
+                <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:" + Value))" Options="@localOptions" OnChange="@((args) => 
                 {
                     AdditionalInfo.GetParameterByKey("parametersIf:" + Value).SetValue(args.NewParameterCollection);
                     Change(Value, AdditionalInfo);
@@ -55,7 +65,12 @@
                             })"></RadzenDropDown>
             @if (AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:" + Value, typeof(ParameterCollection)))
             {
-                <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:" + Value))" Options="@Options" OnChange="@((args) => 
+                var localOptions = Options;
+                if (Options.AdditionalInfoWillOverride && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:" + Value + ":options", typeof(ParameterCollection)))
+                {
+                    localOptions = ParameterCollectionViewOptions.CreateFromParameterCollection(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:" + Value + ":options"), Options);
+                }
+                <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:" + Value))" Options="@localOptions" OnChange="@((args) => 
                 {
                     AdditionalInfo.GetParameterByKey("parametersIf:" + Value).SetValue(args.NewParameterCollection);
                     Change(Value, AdditionalInfo);
@@ -99,7 +114,7 @@ else {
     public required ParameterCollectionViewOptions Options { get; set; }
 
     [Parameter]
-    public required Action<object, ParameterCollection?> Change { get; set; }
+    public required Action<object?, ParameterCollection?> Change { get; set; }
     
     [Parameter]
     public required Action<ElementReference>? Tooltip { get; set; }

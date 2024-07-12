@@ -1,15 +1,15 @@
 ﻿@using Radzen.Blazor
 @using YngveHestem.GenericParameterCollection.ParameterValueConverters
 
-@if (AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:true", typeof(ParameterCollection)) || AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:false", typeof(ParameterCollection)))
+@if (AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:true", typeof(ParameterCollection)) || AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:false", typeof(ParameterCollection)) || AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:null", typeof(ParameterCollection)))
 {
     if (Options.ParentTypeWhenHavingExtraParameters == ExtraParametersParentType.None)
     {
         <RadzenFormField Text="@ParameterName" AllowFloatingLabel="@Options.AllowFloatingLabel" Variant="@Options.ElementsDesignVariant" MouseEnter="@Tooltip">
             <RadzenStack Class="rz-px-sm-12 rz-py-sm-4">
-                @if (Options.BoolControlToUse == BoolControl.Switch)
+                @if (Options.BoolControlToUse == BoolControl.Switch && Value.HasValue && !Options.IsNullable)
                 {
-                    <RadzenSwitch aria-label="@ParameterName" Disabled="@Options.ReadOnly" Value="@Value" Change="@((v) => 
+                    <RadzenSwitch aria-label="@ParameterName" Disabled="@Options.ReadOnly" Value="@Value.Value" Change="@((v) => 
                             {
                                 Value = v;
                                 Change(Value, null);
@@ -17,7 +17,7 @@
                 }
                 else
                 {
-                    <RadzenCheckBox aria-label="@ParameterName" Disabled="@Options.ReadOnly" TValue="bool" Value="@Value" Change="@((v) => 
+                    <RadzenCheckBox aria-label="@ParameterName" TriState="@Options.IsNullable" Disabled="@Options.ReadOnly" TValue="bool?" Value="@Value" Change="@((v) => 
                             {
                                 Value = v;
                                 Change(Value, null);
@@ -25,19 +25,42 @@
                 }
             </RadzenStack>
         </RadzenFormField>
-        @if (Value && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:true", typeof(ParameterCollection)))
+        @if (Value.HasValue && Value.Value && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:true", typeof(ParameterCollection)))
         {
-            <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:true"))" Options="@Options" OnChange="@((args) => 
+            var localOptions = Options;
+            if (Options.AdditionalInfoWillOverride && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:true:options", typeof(ParameterCollection)))
+            {
+                localOptions = ParameterCollectionViewOptions.CreateFromParameterCollection(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:true:options"), Options);
+            }
+            <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:true"))" Options="@localOptions" OnChange="@((args) => 
             {
                 AdditionalInfo.GetParameterByKey("parametersIf:true").SetValue(args.NewParameterCollection);
                 Change(Value, AdditionalInfo);
             })" CustomConverters="@CustomConverters" CustomParameterComponents="@CustomParameterComponents"></ParameterCollectionView>
         }
-        else if (!Value && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:false", typeof(ParameterCollection)))
+        else if (Value.HasValue && !Value.Value && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:false", typeof(ParameterCollection)))
         {
-            <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:false"))" Options="@Options" OnChange="@((args) => 
+            var localOptions = Options;
+            if (Options.AdditionalInfoWillOverride && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:false:options", typeof(ParameterCollection)))
+            {
+                localOptions = ParameterCollectionViewOptions.CreateFromParameterCollection(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:false:options"), Options);
+            }
+            <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:false"))" Options="@localOptions" OnChange="@((args) => 
             {
                 AdditionalInfo.GetParameterByKey("parametersIf:false").SetValue(args.NewParameterCollection);
+                Change(Value, AdditionalInfo);
+            })" CustomConverters="@CustomConverters" CustomParameterComponents="@CustomParameterComponents"></ParameterCollectionView>
+        }
+        else if (!Value.HasValue && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:null", typeof(ParameterCollection)))
+        {
+            var localOptions = Options;
+            if (Options.AdditionalInfoWillOverride && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:null:options", typeof(ParameterCollection)))
+            {
+                localOptions = ParameterCollectionViewOptions.CreateFromParameterCollection(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:null:options"), Options);
+            }
+            <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:null"))" Options="@localOptions" OnChange="@((args) => 
+            {
+                AdditionalInfo.GetParameterByKey("parametersIf:null").SetValue(args.NewParameterCollection);
                 Change(Value, AdditionalInfo);
             })" CustomConverters="@CustomConverters" CustomParameterComponents="@CustomParameterComponents"></ParameterCollectionView>
         }
@@ -46,9 +69,9 @@
     {
         <RadzenFormField Text="@ParameterName" AllowFloatingLabel="@Options.AllowFloatingLabel" Variant="@Options.ElementsDesignVariant" MouseEnter="@Tooltip">
             <RadzenStack Class="rz-px-sm-12 rz-py-sm-4">
-                @if (Options.BoolControlToUse == BoolControl.Switch)
+                @if (Options.BoolControlToUse == BoolControl.Switch && Value.HasValue && !Options.IsNullable)
                 {
-                    <RadzenSwitch aria-label="@ParameterName" Disabled="@Options.ReadOnly" Value="@Value" Change="@((v) => 
+                    <RadzenSwitch aria-label="@ParameterName" Disabled="@Options.ReadOnly" Value="@Value.Value" Change="@((v) => 
                             {
                                 Value = v;
                                 Change(Value, null);
@@ -56,7 +79,7 @@
                 }
                 else
                 {
-                    <RadzenCheckBox aria-label="@ParameterName" Disabled="@Options.ReadOnly" TValue="bool" Value="@Value" Change="@((v) => 
+                    <RadzenCheckBox aria-label="@ParameterName" TriState="@Options.IsNullable" Disabled="@Options.ReadOnly" TValue="bool?" Value="@Value" Change="@((v) => 
                             {
                                 Value = v;
                                 Change(Value, null);
@@ -64,45 +87,74 @@
                 }
             </RadzenStack>
         </RadzenFormField>
-        @if (Value && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:true", typeof(ParameterCollection)))
+        @if (Value.HasValue && Value.Value && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:true", typeof(ParameterCollection)))
         {
             var extraParametersName = string.Format(Options.ExtraParametersName, ParameterName, Value);
             if (AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:true:name", typeof(string)))
             {
                 extraParametersName = AdditionalInfo.GetByKey<string>("parametersIf:true:name");
             }
+            var localOptions = Options;
+            if (Options.AdditionalInfoWillOverride && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:true:options", typeof(ParameterCollection)))
+            {
+                localOptions = ParameterCollectionViewOptions.CreateFromParameterCollection(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:true:options"), Options);
+            }
             <RadzenFieldset Text="@extraParametersName">
-                <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:true"))" Options="@Options" OnChange="@((args) => 
+                <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:true"))" Options="@localOptions" OnChange="@((args) => 
                 {
                     AdditionalInfo.GetParameterByKey("parametersIf:true").SetValue(args.NewParameterCollection);
                     Change(Value, AdditionalInfo);
                 })" CustomConverters="@CustomConverters" CustomParameterComponents="@CustomParameterComponents"></ParameterCollectionView>
             </RadzenFieldset>
         }
-        else if (!Value && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:false", typeof(ParameterCollection)))
+        else if (Value.HasValue && !Value.Value && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:false", typeof(ParameterCollection)))
         {
             var extraParametersName = string.Format(Options.ExtraParametersName, ParameterName, Value);
             if (AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:false:name", typeof(string)))
             {
                 extraParametersName = AdditionalInfo.GetByKey<string>("parametersIf:false:name");
             }
+            var localOptions = Options;
+            if (Options.AdditionalInfoWillOverride && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:false:options", typeof(ParameterCollection)))
+            {
+                localOptions = ParameterCollectionViewOptions.CreateFromParameterCollection(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:false:options"), Options);
+            }
             <RadzenFieldset Text="@extraParametersName">
-                <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:false"))" Options="@Options" OnChange="@((args) => 
+                <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:false"))" Options="@localOptions" OnChange="@((args) => 
                 {
                     AdditionalInfo.GetParameterByKey("parametersIf:false").SetValue(args.NewParameterCollection);
                     Change(Value, AdditionalInfo);
                 })" CustomConverters="@CustomConverters" CustomParameterComponents="@CustomParameterComponents"></ParameterCollectionView>
             </RadzenFieldset>
         }
-        
+        else if (!Value.HasValue && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:null", typeof(ParameterCollection)))
+        {
+            var extraParametersName = string.Format(Options.ExtraParametersName, ParameterName, Value);
+            if (AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:null:name", typeof(string)))
+            {
+                extraParametersName = AdditionalInfo.GetByKey<string>("parametersIf:null:name");
+            }
+            var localOptions = Options;
+            if (Options.AdditionalInfoWillOverride && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:null:options", typeof(ParameterCollection)))
+            {
+                localOptions = ParameterCollectionViewOptions.CreateFromParameterCollection(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:null:options"), Options);
+            }
+            <RadzenFieldset Text="@extraParametersName">
+                <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:null"))" Options="@localOptions" OnChange="@((args) => 
+                {
+                    AdditionalInfo.GetParameterByKey("parametersIf:null").SetValue(args.NewParameterCollection);
+                    Change(Value, AdditionalInfo);
+                })" CustomConverters="@CustomConverters" CustomParameterComponents="@CustomParameterComponents"></ParameterCollectionView>
+            </RadzenFieldset>
+        }
     }
     else if  (Options.ParentTypeWhenHavingExtraParameters == ExtraParametersParentType.RadzenFieldsetOverWholeParameter)
     {
         <RadzenFieldset Text="@ParameterName" MouseEnter="@Tooltip">
             <RadzenStack Class="rz-px-sm-12 rz-py-sm-4">
-                @if (Options.BoolControlToUse == BoolControl.Switch)
+                @if (Options.BoolControlToUse == BoolControl.Switch && Value.HasValue && !Options.IsNullable)
                 {
-                    <RadzenSwitch aria-label="@ParameterName" Disabled="@Options.ReadOnly" Value="@Value" Change="@((v) => 
+                    <RadzenSwitch aria-label="@ParameterName" Disabled="@Options.ReadOnly" Value="@Value.Value" Change="@((v) => 
                         {
                             Value = v;
                             Change(Value, null);
@@ -110,26 +162,49 @@
                 }
                 else
                 {
-                    <RadzenCheckBox aria-label="@ParameterName" Disabled="@Options.ReadOnly" TValue="bool" Value="@Value" Change="@((v) => 
+                    <RadzenCheckBox aria-label="@ParameterName" TriState="@Options.IsNullable" Disabled="@Options.ReadOnly" TValue="bool?" Value="@Value" Change="@((v) => 
                         {
                             Value = v;
                             Change(Value, null);
                         })"></RadzenCheckBox>
                 }
             </RadzenStack>
-            @if (Value && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:true", typeof(ParameterCollection)))
+            @if (Value.HasValue && Value.Value && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:true", typeof(ParameterCollection)))
             {
-                <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:true"))" Options="@Options" OnChange="@((args) => 
+                var localOptions = Options;
+                if (Options.AdditionalInfoWillOverride && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:true:options", typeof(ParameterCollection)))
+                {
+                    localOptions = ParameterCollectionViewOptions.CreateFromParameterCollection(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:true:options"), Options);
+                }
+                <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:true"))" Options="@localOptions" OnChange="@((args) => 
                 {
                     AdditionalInfo.GetParameterByKey("parametersIf:true").SetValue(args.NewParameterCollection);
                     Change(Value, AdditionalInfo);
                 })" CustomConverters="@CustomConverters" CustomParameterComponents="@CustomParameterComponents"></ParameterCollectionView>
             }
-            else if (!Value && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:false", typeof(ParameterCollection)))
+            else if (Value.HasValue && !Value.Value && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:false", typeof(ParameterCollection)))
             {
-                <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:false"))" Options="@Options" OnChange="@((args) => 
+                var localOptions = Options;
+                if (Options.AdditionalInfoWillOverride && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:false:options", typeof(ParameterCollection)))
+                {
+                    localOptions = ParameterCollectionViewOptions.CreateFromParameterCollection(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:false:options"), Options);
+                }
+                <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:false"))" Options="@localOptions" OnChange="@((args) => 
                 {
                     AdditionalInfo.GetParameterByKey("parametersIf:false").SetValue(args.NewParameterCollection);
+                    Change(Value, AdditionalInfo);
+                })" CustomConverters="@CustomConverters" CustomParameterComponents="@CustomParameterComponents"></ParameterCollectionView>
+            }
+            else if (!Value.HasValue && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:null", typeof(ParameterCollection)))
+            {
+                var localOptions = Options;
+                if (Options.AdditionalInfoWillOverride && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:null:options", typeof(ParameterCollection)))
+                {
+                    localOptions = ParameterCollectionViewOptions.CreateFromParameterCollection(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:null:options"), Options);
+                }
+                <ParameterCollectionView ParameterCollection="@(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:null"))" Options="@localOptions" OnChange="@((args) => 
+                {
+                    AdditionalInfo.GetParameterByKey("parametersIf:null").SetValue(args.NewParameterCollection);
                     Change(Value, AdditionalInfo);
                 })" CustomConverters="@CustomConverters" CustomParameterComponents="@CustomParameterComponents"></ParameterCollectionView>
             }
@@ -139,9 +214,9 @@
 else {
     <RadzenFormField Text="@ParameterName" AllowFloatingLabel="@Options.AllowFloatingLabel" Variant="@Options.ElementsDesignVariant" MouseEnter="@Tooltip">
         <RadzenStack Class="rz-px-sm-12 rz-py-sm-4">
-            @if (Options.BoolControlToUse == BoolControl.Switch)
+            @if (Options.BoolControlToUse == BoolControl.Switch && Value.HasValue && !Options.IsNullable)
             {
-                <RadzenSwitch aria-label="@ParameterName" Disabled="@Options.ReadOnly" Value="@Value" Change="@((v) => 
+                <RadzenSwitch aria-label="@ParameterName" Disabled="@Options.ReadOnly" Value="@Value.Value" Change="@((v) => 
                         {
                             Value = v;
                             Change(Value, null);
@@ -149,7 +224,7 @@ else {
             }
             else
             {
-                <RadzenCheckBox aria-label="@ParameterName" Disabled="@Options.ReadOnly" TValue="bool" Value="@Value" Change="@((v) => 
+                <RadzenCheckBox aria-label="@ParameterName" TriState="@Options.IsNullable" Disabled="@Options.ReadOnly" TValue="bool?" Value="@Value" Change="@((v) => 
                         {
                             Value = v;
                             Change(Value, null);
@@ -163,13 +238,13 @@ else {
     public required string ParameterName { get; set; }
 
     [Parameter]
-    public required bool Value { get; set; }
+    public required bool? Value { get; set; }
 
     [Parameter]
     public required ParameterCollectionViewOptions Options { get; set; }
 
     [Parameter]
-    public required Action<object, ParameterCollection?> Change { get; set; }
+    public required Action<object?, ParameterCollection?> Change { get; set; }
     
     [Parameter]
     public required Action<ElementReference>? Tooltip { get; set; }
