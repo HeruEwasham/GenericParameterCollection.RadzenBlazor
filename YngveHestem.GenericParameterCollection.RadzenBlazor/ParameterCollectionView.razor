@@ -111,14 +111,6 @@
                         {
                             <RadzenFileInput aria-label="@parameterText" Disabled="@localOptions.ReadOnly" TValue="byte[]" Value="@(parameter.GetValue<byte[]>(CustomConverters))" Placeholder="@localOptions.PlaceholderText" ChooseText="@localOptions.ChooseFileText" DeleteText="@localOptions.DeleteFileText" MaxHeight="@localOptions.FilePreviewHeight" MaxWidth="@localOptions.FilePreviewWidth" Change="(value) => ChangeParameter(parameter.Key, value)" MaxFileSize="@localOptions.MaxFileSize" Accept="@localOptions.AcceptedMimeTypes.JoinOrEmpty(",")"></RadzenFileInput>
                         }
-                        else if (parameter.Type == ParameterType.DateTime)
-                        {
-                            <RadzenDatePicker aria-label="@parameterText" ReadOnly="@localOptions.ReadOnly" DateFormat="@localOptions.DateTimeFormat" Placeholder="@localOptions.PlaceholderText" AllowClear="false" TValue="DateTime" ShowDays="true" ShowTime="true" ShowSeconds="true" HoursStep="@localOptions.HoursStep.ToString()" MinutesStep="@localOptions.MinutesStep.ToString()" SecondsStep="@localOptions.SecondsStep.ToString()" ShowCalendarWeek="@localOptions.ShowCalenderWeek" Min="@localOptions.MinDate" Max="@localOptions.MaxDate" CalendarWeekTitle="@localOptions.CalendarWeekTitle" Value="@(parameter.GetValue<DateTime>(CustomConverters))" Change="(value) => ChangeParameter(parameter.Key, value)"></RadzenDatePicker>
-                        }
-                        else if (parameter.Type == ParameterType.Date)
-                        {
-                            <RadzenDatePicker aria-label="@parameterText" ReadOnly="@localOptions.ReadOnly" DateFormat="@localOptions.DateFormat" Placeholder="@localOptions.PlaceholderText" AllowClear="false" TValue="DateTime" ShowDays="true" ShowCalendarWeek="@localOptions.ShowCalenderWeek" Min="@localOptions.MinDate" Max="@localOptions.MaxDate" CalendarWeekTitle="@localOptions.CalendarWeekTitle" Value="@(parameter.GetValue<DateTime>(CustomConverters))" Change="(value) => ChangeParameter(parameter.Key, value)"></RadzenDatePicker>
-                        }
                         else if (parameter.Type == ParameterType.String_IEnumerable
                         || parameter.Type == ParameterType.String_Multiline_IEnumerable
                         || parameter.Type == ParameterType.Int_IEnumerable
@@ -299,12 +291,9 @@
 
     private void ChangeParameter(string parameterKey, object? value)
     {
-        if (value != null)
+        if (_currentParameterCollection!.GetParameterByKey(parameterKey).SetValue(value, CustomConverters) && OnChange.HasDelegate)
         {
-            if (_currentParameterCollection!.GetParameterByKey(parameterKey).SetValue(value, CustomConverters) && OnChange.HasDelegate)
-            {
-                OnChange.InvokeAsync(new ParameterCollectionViewOnChangeEventArgs(_currentParameterCollection, parameterKey));
-            }
+            OnChange.InvokeAsync(new ParameterCollectionViewOnChangeEventArgs(_currentParameterCollection, parameterKey));
         }
     }
 
@@ -314,22 +303,14 @@
         {
             ChangeParameter(parameterKey, value);
         }
-        else if (value != null)
+        else if (_currentParameterCollection!.GetParameterByKey(parameterKey).SetValue(value, additionalInfo, CustomConverters) && OnChange.HasDelegate)
         {
-            if (_currentParameterCollection!.GetParameterByKey(parameterKey).SetValue(value, additionalInfo, CustomConverters) && OnChange.HasDelegate)
-            {
-                OnChange.InvokeAsync(new ParameterCollectionViewOnChangeEventArgs(_currentParameterCollection, parameterKey));
-            }
+            OnChange.InvokeAsync(new ParameterCollectionViewOnChangeEventArgs(_currentParameterCollection, parameterKey));
         }
     }
 
     private void UpdateListParameter<TValue>(string parameterKey, int index, TValue? value)
     {
-        if (value == null)
-        {
-            return;
-        }
-
         var list = _currentParameterCollection!.GetByKey<List<TValue>>(parameterKey, CustomConverters);
         if (index < list.Count)
         {

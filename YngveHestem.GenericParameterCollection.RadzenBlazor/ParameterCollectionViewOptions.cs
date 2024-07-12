@@ -295,6 +295,12 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
         [ParameterProperty("selectManyExtraParametersName")]
         public string SelectManyExtraParametersName = "Extra parameters when {0} has theese values";
 
+        /// <summary>
+        /// Should the controls that support it allow setting a value to null or not.
+        /// </summary>
+        [ParameterProperty("isNullable")]
+        public bool IsNullable = false;
+
         public ParameterCollectionViewOptions CreateCopy()
         {
             return new ParameterCollectionViewOptions
@@ -346,7 +352,8 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
                 ParentTypeWhenHavingExtraParameters = ParentTypeWhenHavingExtraParameters,
                 ExtraParametersName = ExtraParametersName,
                 SelectManyExtraParametersGetOwnParent = SelectManyExtraParametersGetOwnParent,
-                SelectManyExtraParametersName = SelectManyExtraParametersName
+                SelectManyExtraParametersName = SelectManyExtraParametersName,
+                IsNullable = IsNullable
             };
         }
         /// <summary>
@@ -629,6 +636,11 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
             if (parameters.HasKeyAndCanConvertTo("selectManyExtraParametersName", typeof(string)))
             {
                 options.SelectManyExtraParametersName = parameters.GetByKey<string>("selectManyExtraParametersName");
+            }
+
+            if (parameters.HasKeyAndCanConvertTo("isNullable", typeof(bool)))
+            {
+                options.IsNullable = parameters.GetByKey<bool>("isNullable");
             }
 
             return options;

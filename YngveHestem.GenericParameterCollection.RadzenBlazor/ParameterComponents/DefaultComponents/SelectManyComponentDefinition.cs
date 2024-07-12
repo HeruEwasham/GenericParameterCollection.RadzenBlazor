@@ -6,7 +6,7 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor.ParameterComponent
 
 public class SelectManyComponentDefinition : IParameterComponentDefinition
 {
-    public Dictionary<string, object> GetComponentParameters(Parameter parameter, string parameterName, ParameterCollection additionalInfo, ParameterCollectionViewOptions options, IParameterValueConverter[]? customConverters, IParameterComponentDefinition[]? customParameterComponents, Action<object, ParameterCollection?> updateParameterValue, TooltipService tooltipService)
+    public Dictionary<string, object> GetComponentParameters(Parameter parameter, string parameterName, ParameterCollection additionalInfo, ParameterCollectionViewOptions options, IParameterValueConverter[]? customConverters, IParameterComponentDefinition[]? customParameterComponents, Action<object?, ParameterCollection?> updateParameterValue, TooltipService tooltipService)
     {
         Action<ElementReference>? tooltip = null;
         if (additionalInfo.HasKeyAndCanConvertTo(options.TooltipParameterTextKey, typeof(string)))
