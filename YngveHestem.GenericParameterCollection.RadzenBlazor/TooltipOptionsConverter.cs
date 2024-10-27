@@ -6,7 +6,7 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
 {
     public class TooltipOptionsConverter : ParameterCollectionParameterConverter<TooltipOptions>
     {
-        protected override bool CanConvertFromParameterCollection(ParameterCollection value, IEnumerable<IParameterValueConverter> customConverter)
+        protected override bool CanConvertFromParameterCollection(ParameterCollection value, ParameterCollection additionalInfo, IEnumerable<IParameterValueConverter> customConverter)
         {
             return value.HasKeyAndCanConvertTo("position", typeof(TooltipPosition)) &&
                 value.HasKeyAndCanConvertTo("duration", typeof(int)) &&
@@ -17,12 +17,12 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
                 value.HasKeyAndCanConvertTo("text", typeof(string));
         }
 
-        protected override bool CanConvertToParameterCollection(TooltipOptions value, IEnumerable<IParameterValueConverter> customConverter)
+        protected override bool CanConvertToParameterCollection(TooltipOptions value, ParameterCollection additionalInfo, IEnumerable<IParameterValueConverter> customConverter)
         {
             return value != null;
         }
 
-        protected override TooltipOptions ConvertFromParameterCollection(ParameterCollection value, IEnumerable<IParameterValueConverter> customConverter)
+        protected override TooltipOptions ConvertFromParameterCollection(ParameterCollection value, ParameterCollection additionalInfo, IEnumerable<IParameterValueConverter> customConverter)
         {
             int? duration = value.GetByKey<int>("duration");
             int? delay = value.GetByKey<int>("delay");
@@ -47,7 +47,7 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
             };
         }
 
-        protected override ParameterCollection ConvertToParameterCollection(TooltipOptions value, IEnumerable<IParameterValueConverter> customConverter)
+        protected override ParameterCollection ConvertToParameterCollection(TooltipOptions value, ParameterCollection additionalInfo, IEnumerable<IParameterValueConverter> customConverter)
         {
             var duration = 0;
             var delay = 0;
