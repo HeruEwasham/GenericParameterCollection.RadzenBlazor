@@ -5,10 +5,12 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 
-    <Version>1.0.0</Version>
+    <Version>1.0.3</Version>
     <Description>This provides controls for using GenericParameterCollection in a Blazor-application by using Radzen.Blazor-components.</Description>
     <PackageReleaseNotes>
-        - Initial main release with latest Radzen.Blazor (version 4.32.7) and latest GenericParameterCollection (version 1.1.2).
+        - Updated GenericParameterCollection to version 1.1.7
+        - Updated Radzen.Blazor to version 5.3.5, and
+        - Updated Microsoft.AspNetCore.Components.Web to version 8.0.10
     </PackageReleaseNotes>
     <Authors>Yngve J. K. Hestem</Authors>
     <Copyright>Copyright (c) Yngve J. K. Hestem 2024</Copyright>
