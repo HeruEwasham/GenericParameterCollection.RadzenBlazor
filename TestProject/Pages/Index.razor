@@ -19,7 +19,7 @@
 
 <Radzen.Blazor.RadzenButton Text="Update ParameterCollection manually" Click="@((args) => _parameters = _parameterCollectionView!.ParameterCollection!)"></Radzen.Blazor.RadzenButton>
 
-<Radzen.Blazor.RadzenTextArea Cols="150" Rows="20" ReadOnly="true" Value="@_parameters.ToString()"></Radzen.Blazor.RadzenTextArea>
+<Radzen.Blazor.RadzenTextArea Cols="150" Rows="20" ReadOnly="true" Value="@_parameters.ToJson(Newtonsoft.Json.Formatting.Indented)"></Radzen.Blazor.RadzenTextArea>
 
 @code {
     private ParameterCollection _parameters = new ParameterCollection

@@ -1,5 +1,8 @@
 ﻿@using Radzen.Blazor
 @using YngveHestem.GenericParameterCollection.ParameterValueConverters
+
+@namespace YngveHestem.GenericParameterCollection.RadzenBlazor.ParameterComponents.DefaultComponents
+
 @if (Choices.Any(c => AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:" + c, typeof(ParameterCollection))))
 {
     if (Options.ParentTypeWhenHavingExtraParameters == ExtraParametersParentType.None)
