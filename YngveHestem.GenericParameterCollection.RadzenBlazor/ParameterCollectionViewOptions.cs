@@ -1,5 +1,6 @@
 ﻿using System;
 using Radzen;
+using YngveHestem.GenericParameterCollection.RadzenBlazor.ParameterComponents;
 
 namespace YngveHestem.GenericParameterCollection.RadzenBlazor
 {
@@ -270,6 +271,36 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
         [ParameterProperty("addEntryToListAriaDescription")]
         public string AddEntryToListAriaDescription = "Add a new entry to the list in parameter \"{0}\".";
 
+        /// <summary>
+        /// Defines how any parent component is shown when using "extra parameters" like "parametersIf:true" and "parametersIf:false".
+        /// </summary>
+        [ParameterProperty("parentTypeWhenHavingExtraParameters")]
+        public ExtraParametersParentType ParentTypeWhenHavingExtraParameters = ExtraParametersParentType.None;
+
+        /// <summary>
+        /// Specifies the text used on the the collection of extra parameters (not all ParentTypeWhenHavingExtraParameters-options use it). You can use {0} to get the parameterName of the main parameter and use {1} to get the value of the main parameter.
+        /// </summary>
+        [ParameterProperty("extraParametersName")]
+        public string ExtraParametersName = "Extra parameters when {0} is {1}";
+
+        /// <summary>
+        /// Should each extra parameter-collection (one for each value that has one), get it's own visible parent (RadzenFieldset). ExtraParametersParentType will here decide if all the given collections should have one too or not.
+        /// </summary>
+        [ParameterProperty("selectManyExtraParametersGetOwnParent")]
+        public bool SelectManyExtraParametersGetOwnParent = true;
+
+        /// <summary>
+        /// Specifies the text used on the the total collection of extra parameters for SelectMany-parameters (not all ParentTypeWhenHavingExtraParameters-options use it). You can use {0} to get the parameterName of the main parameter.
+        /// </summary>
+        [ParameterProperty("selectManyExtraParametersName")]
+        public string SelectManyExtraParametersName = "Extra parameters when {0} has theese values";
+
+        /// <summary>
+        /// Should the controls that support it allow setting a value to null or not.
+        /// </summary>
+        [ParameterProperty("isNullable")]
+        public bool IsNullable = false;
+
         public ParameterCollectionViewOptions CreateCopy()
         {
             return new ParameterCollectionViewOptions
@@ -317,7 +348,12 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
                 AddEntryToListText = AddEntryToListText,
                 DeleteEntryFromListText = DeleteEntryFromListText,
                 DeleteEntryFromListAriaDescription = DeleteEntryFromListAriaDescription,
-                AddEntryToListAriaDescription = AddEntryToListAriaDescription
+                AddEntryToListAriaDescription = AddEntryToListAriaDescription,
+                ParentTypeWhenHavingExtraParameters = ParentTypeWhenHavingExtraParameters,
+                ExtraParametersName = ExtraParametersName,
+                SelectManyExtraParametersGetOwnParent = SelectManyExtraParametersGetOwnParent,
+                SelectManyExtraParametersName = SelectManyExtraParametersName,
+                IsNullable = IsNullable
             };
         }
         /// <summary>
@@ -580,6 +616,31 @@ namespace YngveHestem.GenericParameterCollection.RadzenBlazor
             if (parameters.HasKeyAndCanConvertTo("addEntryToListAriaDescription", typeof(string)))
             {
                 options.AddEntryToListAriaDescription = parameters.GetByKey<string>("addEntryToListAriaDescription");
+            }
+
+            if (parameters.HasKeyAndCanConvertTo("parentTypeWhenHavingExtraParameters", typeof(ExtraParametersParentType)))
+            {
+                options.ParentTypeWhenHavingExtraParameters = parameters.GetByKey<ExtraParametersParentType>("parentTypeWhenHavingExtraParameters");
+            }
+
+            if (parameters.HasKeyAndCanConvertTo("extraParametersName", typeof(string)))
+            {
+                options.ExtraParametersName = parameters.GetByKey<string>("extraParametersName");
+            }
+
+            if (parameters.HasKeyAndCanConvertTo("selectManyExtraParametersGetOwnParent", typeof(bool)))
+            {
+                options.SelectManyExtraParametersGetOwnParent = parameters.GetByKey<bool>("selectManyExtraParametersGetOwnParent");
+            }
+
+            if (parameters.HasKeyAndCanConvertTo("selectManyExtraParametersName", typeof(string)))
+            {
+                options.SelectManyExtraParametersName = parameters.GetByKey<string>("selectManyExtraParametersName");
+            }
+
+            if (parameters.HasKeyAndCanConvertTo("isNullable", typeof(bool)))
+            {
+                options.IsNullable = parameters.GetByKey<bool>("isNullable");
             }
 
             return options;

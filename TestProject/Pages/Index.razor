@@ -9,10 +9,6 @@
 
 <h1>Hello, world!</h1>
 
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
-
 <Radzen.Blazor.RadzenCard>
     <Radzen.Blazor.RadzenText TextStyle="Radzen.Blazor.TextStyle.DisplayH2">Parameters</Radzen.Blazor.RadzenText>
     <ParameterCollectionView @ref="_parameterCollectionView" ParameterCollection="@_parameters" Options="@_options" CustomParameterComponents="@_customComponents" OnChange="@(args => {
@@ -86,25 +82,221 @@ Welcome to your new app.
         { "A list of ParameterCollection with a few parameters",
             new ParameterCollection[] {
                 new ParameterCollection
-            {
+                {
                     { "Name", "Sherlock Holmes" },
                     { "Work", "Detective" },
                     { "Is fictional", true }
                 },
                 new ParameterCollection
-            {
+                {
                     { "Name", "Albert Einstein" },
                     { "Work", "Theoretical physicist" },
                     { "Is fictional", false }
                 }
             }, new ParameterCollection
-        {
+            {
                 { "defaultValue",
                     new ParameterCollection
                 {
                         { "Name", string.Empty },
                         { "Work", string.Empty },
                         { "Is fictional", false }
+                    }
+                }
+            }
+        },
+
+        // Bools with extra parameters:
+        { "Bool with extra parameters if true", false, new ParameterCollection 
+            {
+                { "parametersIf:true", new ParameterCollection 
+                    {
+                        { "Do you like this?", true },
+                        { "Comment", string.Empty }
+                    }
+                }
+            }
+        },
+        { "Bool with extra parameters if both true and false", false, new ParameterCollection 
+            {
+                { "parametersIf:true", new ParameterCollection 
+                    {
+                        { "Do you like this?", true },
+                        { "Comment", string.Empty }
+                    }
+                },
+                { "parametersIf:false", new ParameterCollection 
+                    {
+                        { "Why is this not set to true?", string.Empty }
+                    }
+                },
+            }
+        },
+        { "Bool with extra parameters if true with name on extra parameters (and a small additional question if not)", false, new ParameterCollection 
+            {
+                { "parametersIf:true", new ParameterCollection 
+                    {
+                        { "Do you like this?", true },
+                        { "Comment", string.Empty }
+                    }
+                },
+                { "parametersIf:false", new ParameterCollection 
+                    {
+                        { "Why is this not set to true?", string.Empty }
+                    }
+                },
+                { "parametersIf:true:name", "Then we need some more input" },
+                { "parametersIf:false:name", "Ok, can we ask one additional question?" },
+                { "parentTypeWhenHavingExtraParameters", ExtraParametersParentType.RadzenFieldsetOnOnlyCollection }
+            }
+        },
+
+        // Enum and SelectOne-types with extra parameters:
+        { "Select which bool-control you like best", BoolControl.Switch, new ParameterCollection 
+            {
+                { "parametersIf:Checkbox", new ParameterCollection 
+                    {
+                        { "Do you like it because it is old-school?", true },
+                        { "Comment", string.Empty }
+                    }
+                }
+            }
+        },
+        { "Select which bool-control you like best with more extra parameters", BoolControl.Switch, new ParameterCollection 
+            {
+                { "parametersIf:Checkbox", new ParameterCollection 
+                    {
+                        { "Do you like it because it is old-school?", true },
+                        { "Comment", string.Empty }
+                    }
+                },
+                { "parametersIf:Switch", new ParameterCollection 
+                    {
+                        { "When was you born?", DateTime.Now, true },
+                        { "Comment", string.Empty }
+                    }
+                },
+                { "parametersIf:Checkbox:name", "I do wonder..." },
+                { "parentTypeWhenHavingExtraParameters", ExtraParametersParentType.RadzenFieldsetOnOnlyCollection },
+                { "prettyValues", new ParameterCollection 
+                    {
+                        { "Checkbox", "The old checkbox" }
+                    }
+                }
+            }
+        },
+        { "Which of theese artists do you like best", "Elvis", new string[] {"Rihanna", "Elvis", "Elton John", "AC/DC", "ABBA"}, new ParameterCollection 
+            {
+                { "parametersIf:Elvis", new ParameterCollection 
+                    {
+                        { "You know he is dead?", true },
+                    }
+                },
+                { "parametersIf:AC/DC", new ParameterCollection 
+                    {
+                        { "Do you like Thunderstruck", true },
+                    }
+                },
+                { "parametersIf:ABBA", new ParameterCollection 
+                    {
+                        { "Which country are they from?", string.Empty },
+                    }
+                },
+                { "parentTypeWhenHavingExtraParameters", ExtraParametersParentType.RadzenFieldsetOverWholeParameter }
+            }
+        },
+        { "Select all the artists you like", Array.Empty<string>(), new string[] {"Rihanna", "Elvis", "Elton John", "AC/DC", "ABBA"}, new ParameterCollection 
+            {
+                { "parametersIf:Elvis", new ParameterCollection 
+                    {
+                        { "You know he is dead?", true },
+                    }
+                },
+                { "parametersIf:AC/DC", new ParameterCollection 
+                    {
+                        { "Do you like Thunderstruck", true },
+                    }
+                },
+                { "parametersIf:ABBA", new ParameterCollection 
+                    {
+                        { "Which country are they from?", string.Empty },
+                    }
+                },
+                { "prettyValues", new ParameterCollection 
+                    {
+                        { "Elvis", "Elvis Presley" },
+                        { "Rihanna", "Robyn Rihanna Fenty" }
+                    }
+                }
+            }
+        },
+        { "Bool with null value", null, typeof(bool?) },
+        { "Bool wth null value and allow settng to null", null, typeof(bool?), 
+            new ParameterCollection 
+            {
+                { "isNullable", true }
+            }
+        },
+        { "Int starting as null, but not nullable", null, typeof(int?) },
+        { "Int nullable", 456, 
+            new ParameterCollection 
+            {
+                { "isNullable", true }
+            }
+        },
+        { "Int nullable and starting as null", null, typeof(int?), 
+            new ParameterCollection 
+            {
+                { "isNullable", true }
+            }
+        },
+        { "Decimal starting as null, but not nullable", null, typeof(double?) },
+        { "Decimal nullable", 456.56, 
+            new ParameterCollection 
+            {
+                { "isNullable", true }
+            }
+        },
+        { "Date starting as null, but not nullable", (DateTime?)null, true },
+        { "Date nullable", DateTime.Now, true, 
+            new ParameterCollection 
+            {
+                { "isNullable", true }
+            }
+        },
+        { "DateTime nullable and start as null", (DateTime?)null, 
+            new ParameterCollection 
+            {
+                { "isNullable", true }
+            }
+        },
+        { "DateTime starting as null, but not nullable, with custom defaultValue", (DateTime?)null, 
+            new ParameterCollection 
+            {
+                { "defaultValue", DateTime.Now.AddDays(5) },
+                { "isNullable", false}
+            }
+        },
+        { "DateTime starting as null, but not specifically say nullable", (DateTime?)null},
+        { "enum with null/empty value", null, typeof(ParameterType?) },
+        { "int with null and min max over 0", null, typeof(int?),
+            new ParameterCollection
+            {
+                { "minNumber", 12 },
+                { "maxNumber", 16 }
+            }
+        },
+        { "Select which bool-control you like best (with readonly under-options)", BoolControl.Switch, new ParameterCollection 
+            {
+                { "parametersIf:Checkbox", new ParameterCollection 
+                    {
+                        { "Do you like it because it is old-school?", true },
+                        { "Comment", "It seems you can not change me, but I are multiline", true }
+                    }
+                },
+                { "parametersIf:Checkbox:options", new ParameterCollection 
+                    {
+                        { "readOnly", true }
                     }
                 }
             }
