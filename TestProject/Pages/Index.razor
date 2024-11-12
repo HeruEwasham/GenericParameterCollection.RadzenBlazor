@@ -301,6 +301,21 @@
                 }
             }
         },
+        { "Select which bool-control you like best (with readonly under-options), you can even choose both", Array.Empty<string>(), new string[] { "Switch", "Checkbox" }, new ParameterCollection 
+            {
+                { "parametersIf:Checkbox", new ParameterCollection 
+                    {
+                        { "Do you like it because it is old-school?", true },
+                        { "Comment", "It seems you can not change me, but I are multiline", true }
+                    }
+                },
+                { "parametersIf:Checkbox:options", new ParameterCollection 
+                    {
+                        { "readOnly", true }
+                    }
+                }
+            }
+        }
     };
 
     private IParameterComponentDefinition[] _customComponents = new[]

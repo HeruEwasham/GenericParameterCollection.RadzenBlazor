@@ -16,9 +16,9 @@
             @if (AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:" + item, typeof(ParameterCollection)))
             {
                 var localOptions = Options;
-                if (Options.AdditionalInfoWillOverride && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:" + Value + ":options", typeof(ParameterCollection)))
+                if (Options.AdditionalInfoWillOverride && AdditionalInfo.HasKeyAndCanConvertTo("parametersIf:" + item + ":options", typeof(ParameterCollection)))
                 {
-                    localOptions = ParameterCollectionViewOptions.CreateFromParameterCollection(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:" + Value + ":options"), Options);
+                    localOptions = ParameterCollectionViewOptions.CreateFromParameterCollection(AdditionalInfo.GetByKey<ParameterCollection>("parametersIf:" + item + ":options"), Options);
                 }
                 if (Options.SelectManyExtraParametersGetOwnParent)
                 {
