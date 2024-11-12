@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 
-    <Version>1.0.4</Version>
+    <Version>1.0.5</Version>
     <Description>This provides controls for using GenericParameterCollection in a Blazor-application by using Radzen.Blazor-components.</Description>
     <PackageReleaseNotes>
         - Fixed a bug that made so the parameter "parametersIf:VALUE:options" was not recognized in SelectMany-parameters.
