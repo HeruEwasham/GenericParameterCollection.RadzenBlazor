@@ -111,7 +111,17 @@
                         }
                         else if (parameter.Type == ParameterType.Bytes)
                         {
-                            <RadzenFileInput aria-label="@parameterText" Disabled="@localOptions.ReadOnly" TValue="byte[]" Value="@(parameter.GetValue<byte[]>(CustomConverters))" Placeholder="@localOptions.PlaceholderText" ChooseText="@localOptions.ChooseFileText" DeleteText="@localOptions.DeleteFileText" MaxHeight="@localOptions.FilePreviewHeight" MaxWidth="@localOptions.FilePreviewWidth" Change="(value) => ChangeParameter(parameter.Key, value)" MaxFileSize="@localOptions.MaxFileSize" Accept="@localOptions.AcceptedMimeTypes.JoinOrEmpty(",")"></RadzenFileInput>
+                            <RadzenFileInput aria-label="@parameterText" Disabled="@localOptions.ReadOnly" TValue="byte[]"
+                            Value="@(parameter.GetValue<byte[]>(CustomConverters))"
+                            Placeholder="@localOptions.PlaceholderText"
+                            ChooseText="@localOptions.ChooseFileText"
+                            DeleteText="@localOptions.DeleteFileText"
+                            MaxHeight="@localOptions.FilePreviewHeight"
+                            
+                            Change="@((value) => ChangeParameter(parameter.Key, value))"
+                            MaxFileSize="@localOptions.MaxFileSize" 
+                            Accept="@localOptions.AcceptedMimeTypes.JoinOrEmpty(",")"
+                            ></RadzenFileInput>
                         }
                         else if (parameter.Type == ParameterType.String_IEnumerable
                         || parameter.Type == ParameterType.String_Multiline_IEnumerable
