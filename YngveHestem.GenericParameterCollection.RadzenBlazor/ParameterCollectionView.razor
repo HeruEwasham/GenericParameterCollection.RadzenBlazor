@@ -111,14 +111,14 @@
                         }
                         else if (parameter.Type == ParameterType.Bytes)
                         {
-                            <RadzenFileInput aria-label="@parameterText" Disabled="@localOptions.ReadOnly" TValue="byte[]"
-                            Value="@(parameter.GetValue<byte[]>(CustomConverters))"
+                            <RadzenFileInput aria-label="@parameterText" Disabled="@localOptions.ReadOnly" TValue="string"
+                            Value="@(Convert.ToBase64String(parameter.GetValue<byte[]>(CustomConverters)))"
                             Placeholder="@localOptions.PlaceholderText"
                             ChooseText="@localOptions.ChooseFileText"
                             DeleteText="@localOptions.DeleteFileText"
                             MaxHeight="@localOptions.FilePreviewHeight"
                             
-                            Change="@((value) => ChangeParameter(parameter.Key, value))"
+                            Change="@((value) => ChangeParameter(parameter.Key, Convert.FromBase64String(value.Split(",")[1])))"
                             MaxFileSize="@localOptions.MaxFileSize" 
                             Accept="@localOptions.AcceptedMimeTypes.JoinOrEmpty(",")"
                             ></RadzenFileInput>

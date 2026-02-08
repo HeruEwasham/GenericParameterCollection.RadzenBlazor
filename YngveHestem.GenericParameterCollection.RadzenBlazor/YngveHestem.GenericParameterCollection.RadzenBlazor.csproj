@@ -5,11 +5,10 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 
-    <Version>1.0.6</Version>
+    <Version>1.0.8</Version>
     <Description>This provides controls for using GenericParameterCollection in a Blazor-application by using Radzen.Blazor-components.</Description>
     <PackageReleaseNotes>
-        - Added a workaround to fix a bug that made selecting non-images to not work as expected. This is a temporary fix that are making the FilePreviewWidth-option to not do anything. This because of a bug in Radzen.Blazor itself. Issue is reported: https://github.com/radzenhq/radzen-blazor/issues/1922
-        - Updated Radzen.Blazor to version 5.8.0
+        - Updated depenencies.
     </PackageReleaseNotes>
     <Authors>Yngve J. K. Hestem</Authors>
     <Copyright>Copyright (c) Yngve J. K. Hestem 2024</Copyright>
@@ -26,9 +25,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.10" />
-    <PackageReference Include="Radzen.Blazor" Version="5.8.0" />
-    <PackageReference Include="YngveHestem.GenericParameterCollection" Version="1.1.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.23" />
+    <PackageReference Include="Radzen.Blazor" Version="8.7.5" />
+    <PackageReference Include="YngveHestem.GenericParameterCollection" Version="1.1.12" />
   </ItemGroup>
 
   <ItemGroup>
